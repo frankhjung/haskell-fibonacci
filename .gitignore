@@ -1,0 +1,7 @@
+*.dyn_hi
+*.dyn_o
+fib
+*.hi
+main
+*.o
+.*.swp
