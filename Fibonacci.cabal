@@ -1,7 +1,7 @@
 name:                Fibonacci
 version:             0.1.0
 synopsis:            Show Fibonacci index or sequence
-description:         A simple Haskell project
+description:         A simple Haskell project to generate Fibonacci numbers.
 homepage:            https://github.com/frankhjung/haskell-fibonacci
 license:             GPL-3
 license-file:        LICENSE
@@ -17,17 +17,15 @@ executable fib
   hs-source-dirs:    app
   main-is:           Main.hs
   default-language:  Haskell2010
-  build-depends:     base >= 4.7 && < 5
+  build-depends:     base >= 4.7 && < 5.0
+                   , parseargs >= 0.2.0 && < 0.3
                    , Fibonacci
-                   , parseargs
-  ghc-options:       -O2
-                     -Wall
+  ghc-options:       -Wall
                      -threaded
 
 library
   hs-source-dirs:    src
   exposed-modules:   Fibonacci
   default-language:  Haskell2010
-  build-depends:     base >= 4.7 && < 5
-  ghc-options:       -O2
-                     -Wall
+  build-depends:     base >= 4.7 && < 5.0
+  ghc-options:       -Wall

@@ -6,3 +6,4 @@ main
 *.o
 .*.swp
 .stack-work
+tags
