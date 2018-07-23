@@ -1,27 +1,34 @@
 #!/usr/bin/env make
 
+# build without stack using:
+#
+#   ghc -Wall -O2 --make $(SRCS) -o $(TARGET)
+
 TARGET = fib
-SRCS = $(wildcard */*.hs)
+SRCS = $(wildcard *.hs */*.hs)
 
-build: ${SRCS} check
-	-ghc -Wall -O2 --make ${SRCS} -o ${TARGET}
+build: $(SRCS) check
+	@stack build
 
-all:	cleanall check tags build
+all:	cleanall check build tags
 
 check:	lint style
 
 style:
-	-stylish-haskell --config=.stylish-haskell.yaml --inplace ${SRCS}
+	@stylish-haskell --config=.stylish-haskell.yaml --inplace $(SRCS)
 
 lint:
-	-hlint ${SRCS}
+	@hlint $(SRCS)
 
-tags:
-	@hasktags --ctags ${SRCS}
+tags:	$(SRCS)
+	@hasktags --ctags $(SRCS)
+
+exec:	# Example:  make ARGS="-i 12 -s 12" exec
+	@stack exec -- $(TARGET) $(ARGS)
 
 clean:
-	@$(RM) */*.o */*.hi */*.dyn_hi */*.dyn_o
+	@stack clean
 
 cleanall: clean
-	@$(RM) $(TARGET)
+	@$(RM) -rf .stack-work/
 

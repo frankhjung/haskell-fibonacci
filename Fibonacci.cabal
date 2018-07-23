@@ -1,0 +1,33 @@
+name:                Fibonacci
+version:             0.1.0
+synopsis:            Show Fibonacci index or sequence
+description:         A simple Haskell project
+homepage:            https://github.com/frankhjung/haskell-fibonacci
+license:             GPL-3
+license-file:        LICENSE
+author:              Frank H Jung
+maintainer:          frankhjung@linux.com
+copyright:           Copyright © 2017-2018 Frank H Jung
+category:            education
+build-type:          Simple
+cabal-version:       >=1.10
+extra-source-files:  ChangeLog.md, README.md
+
+executable fib
+  hs-source-dirs:    app
+  main-is:           Main.hs
+  default-language:  Haskell2010
+  build-depends:     base >= 4.7 && < 5
+                   , Fibonacci
+                   , parseargs
+  ghc-options:       -O2
+                     -Wall
+                     -threaded
+
+library
+  hs-source-dirs:    src
+  exposed-modules:   Fibonacci
+  default-language:  Haskell2010
+  build-depends:     base >= 4.7 && < 5
+  ghc-options:       -O2
+                     -Wall

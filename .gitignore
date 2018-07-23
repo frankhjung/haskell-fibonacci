@@ -5,3 +5,4 @@ fib
 main
 *.o
 .*.swp
+.stack-work

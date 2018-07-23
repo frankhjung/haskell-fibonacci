@@ -1,4 +1,4 @@
-module Fibonacci where
+module Fibonacci (fibs, fibi) where
 
 --
 -- fibonacci sequence

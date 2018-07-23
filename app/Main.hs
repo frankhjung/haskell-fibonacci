@@ -53,10 +53,10 @@ main = do
     )
 
   case getArgInt args OptionIndex of
-    Just x  -> putStrLn $ show (fibi x)
+    Just x  -> print (fibi x)
     Nothing -> return ()
 
   case getArgInt args OptionSequence of
-    Just x  -> putStrLn $ show (take x fibs)
+    Just x  -> print (take x fibs)
     Nothing -> return ()
 
