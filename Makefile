@@ -5,16 +5,13 @@
 #   ghc -Wall -O2 --make $(SRCS) -o $(TARGET)
 
 TARGET	:= fib
-SRCS	:= $(wildcard app/*.hs src/*.hs)
+SUBS	:= $(wildcard */)
+SRCS	:= $(wildcard $(addsuffix *.hs, $(SUBS)))
 ARGS	?= -h
 
-build: $(SRCS) check
-	@stack build
-
 .PHONY:	all
-all:	cleanall check build tags
+all:	tags check build exec
 
-.PHONY:	check
 check:	lint style
 
 style:	$(SRCS)
@@ -25,6 +22,9 @@ lint:	$(SRCS)
 
 tags:	$(SRCS)
 	@hasktags --ctags $(SRCS)
+
+build:	$(SRCS)
+	@stack build
 
 .PHONY:	exec
 exec:	# Example:  make ARGS="-i 12 -s 12" exec
