@@ -10,7 +10,7 @@ SRCS	:= $(wildcard $(addsuffix *.hs, $(SUBS)))
 ARGS	?= -h
 
 .PHONY:	all
-all:	tags check build exec
+all:	tags check build test exec
 
 check:	lint style
 
@@ -26,9 +26,17 @@ tags:	$(SRCS)
 build:	$(SRCS)
 	@stack build
 
+.PHONY:	test
+test:
+	@stack test
+
 .PHONY:	exec
 exec:	# Example:  make ARGS="-i 12 -s 12" exec
 	@stack exec -- $(TARGET) $(ARGS)
+
+.PHONY: install
+install:
+	@stack install
 
 .PHONY:	clean
 clean:

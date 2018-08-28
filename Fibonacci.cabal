@@ -1,5 +1,5 @@
 name:                Fibonacci
-version:             0.1.0
+version:             0.2.0
 synopsis:            Show Fibonacci index or sequence
 description:         A simple Haskell project to generate Fibonacci numbers.
 homepage:            https://github.com/frankhjung/haskell-fibonacci
@@ -32,3 +32,17 @@ library
   build-depends:     base >= 4.7 && < 5.0
                    , parallel
   ghc-options:       -Wall
+
+test-suite test
+  hs-source-dirs:    test
+  main-is:           Test.hs
+  default-language:  Haskell2010
+  type:              exitcode-stdio-1.0
+  build-depends:     base >= 4.7 && < 5.0
+                   , QuickCheck
+                   , Fibonacci
+  ghc-options:       -Wall
+                     -threaded
+                     -rtsopts
+                     -with-rtsopts=-N
+
