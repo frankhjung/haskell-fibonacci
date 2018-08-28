@@ -1,3 +1,13 @@
+{-|
+  Module      : Fibonacci
+  Description : Demonstrate different Fibonacci number generators.
+  Copyright   : © Frank Jung, 2018
+  License     : GPL-3
+  Maintainer  : frankhjung@linux.com
+  Stability   : stable
+  Portability : portable
+-}
+
 module Fibonacci ( fibi
                  , fibp
                  , fibs
@@ -13,16 +23,10 @@ fibi n
   | otherwise = fibs !! (n - 1)
 -- fibi n = last (take n fibs)
 
--- | WARNING: the following method is way too slow
--- ... unless run in parallel
---
--- fibi :: Int -> Integer
--- fibi n
---     | n < 1     = 0
---     | n < 2     = 1
---     | otherwise = fibi(n - 1) + fibi(n - 2)
-
 -- | Calculate the nth Fibonacci value in parallel.
+--
+--   WARNING: this is slow
+--
 -- This is the fixed version from:
 --    Source:  Practical Concurrent Haskell: With Big Data Applications
 --    Chapter: (3) Parallelism and Concurrency with Haskell
@@ -40,3 +44,12 @@ fibp n
 fibs :: [Integer]
 tfibs :: [Integer]
 fibs@(1:tfibs) = 1 : 1 : [ a + b | (a, b) <- zip fibs tfibs ]
+
+-- | WARNING: the following method is way too slow
+--
+-- fibi :: Int -> Integer
+-- fibi n
+--     | n < 1     = 0
+--     | n < 2     = 1
+--     | otherwise = fibi(n - 1) + fibi(n - 2)
+

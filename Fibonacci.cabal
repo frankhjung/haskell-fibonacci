@@ -1,5 +1,5 @@
 name:                Fibonacci
-version:             0.2.0
+version:             0.3.0
 synopsis:            Show Fibonacci index or sequence
 description:         A simple Haskell project to generate Fibonacci numbers.
 homepage:            https://github.com/frankhjung/haskell-fibonacci
