@@ -34,6 +34,10 @@ test:
 exec:	# Example:  make ARGS="-i 12 -s 12" exec
 	@stack exec -- $(TARGET) $(ARGS)
 
+.PHONY: install
+install:
+	@stack install --local-bin-path $(HOME)/bin
+
 .PHONY:	docs
 docs:
 	@stack haddock
@@ -43,10 +47,6 @@ setup:
 	-stack setup
 	-stack query
 	-stack ls dependencies
-
-.PHONY: install
-install:
-	@stack install --local-bin-path $(HOME)/bin $(TARGET)
 
 .PHONY:	clean
 clean:

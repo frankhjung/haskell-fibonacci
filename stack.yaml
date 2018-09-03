@@ -2,13 +2,12 @@
 
 # https://docs.haskellstack.org/en/stable/yaml_configuration/
 
-resolver: lts-12.2
+allow-newer: true
+arch: x86_64
 # compiler-check: newer-minor
-
 packages:
 - .
-
-arch: x86_64
-
-allow-newer: true
+# https://www.stackage.org/ ghc 8.2.2 => lts 11.22 
+resolver: lts-11.22
+system-ghc: true
 
