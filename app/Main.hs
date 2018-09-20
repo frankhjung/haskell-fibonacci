@@ -65,7 +65,7 @@ main = do
     Nothing -> return ()
 
   case getArgInt args OptionSequence of
-    Just n  -> print (take n fibs)
+    Just n  -> mapM_ print (take n fibs)
     Nothing -> return ()
 
   case getArgInt args OptionParallel of
