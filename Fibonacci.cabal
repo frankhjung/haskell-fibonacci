@@ -1,5 +1,5 @@
 name:                Fibonacci
-version:             0.3.0
+version:             0.4.0
 synopsis:            Show Fibonacci index or sequence
 description:         A simple Haskell project to generate Fibonacci numbers.
 homepage:            https://github.com/frankhjung/haskell-fibonacci
@@ -11,7 +11,7 @@ copyright:           Copyright © 2017-2018 Frank H Jung
 category:            education
 build-type:          Simple
 cabal-version:       >=1.10
-extra-source-files:  ChangeLog.md, README.md
+extra-source-files:  README.md
 
 executable fib
   hs-source-dirs:    app

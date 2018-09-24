@@ -2,6 +2,7 @@ module Main where
 
 import           Control.Monad            (when)
 import           System.Console.ParseArgs
+import           System.Environment       (getArgs)
 
 import           Fibonacci                (fibi, fibp, fibs)
 
@@ -53,22 +54,23 @@ argd = [
 main :: IO ()
 main = do
 
-  args <- parseArgsIO ArgsComplete argd
-
-  when (gotArg args FlagHelp)
+  -- show help if no parameters or help flagged
+  argp <- parseArgsIO ArgsComplete argd
+  args <- getArgs
+  when (gotArg argp FlagHelp || null args)
     (
-      putStrLn (argsUsage args)
+      putStrLn (argsUsage argp)
     )
 
-  case getArgInt args OptionIndex of
+  case getArgInt argp OptionIndex of
     Just n  -> print (fibi n)
     Nothing -> return ()
 
-  case getArgInt args OptionSequence of
+  case getArgInt argp OptionSequence of
     Just n  -> mapM_ print (take n fibs)
     Nothing -> return ()
 
-  case getArgInt args OptionParallel of
+  case getArgInt argp OptionParallel of
     Just n  -> print (fibp n)
     Nothing -> return ()
 

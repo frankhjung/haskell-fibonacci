@@ -1,21 +1,42 @@
 # Haskell
 
-This was one of my first projects, before I discovered Cabal and Stack.
+Simple project to calculate Fibonacci sequences.
 
-It is the "Hello World" equivalent for recursion:
-
-## Fibonacci
-
-### Usage
+## Usage
 
 ```bash
 usage: fib [options]
   [-h,--help]            Help
-  [-i,--index <int>]     Generate Fibonacci at index
-  [-s,--sequence <int>]  Generate Fibonacci sequence
+  [-i,--index <int>]     Generate Fibonacci at index (>0)
+  [-s,--sequence <int>]  Generate Fibonacci sequence (>0)
+  [-p,--parallel <int>]  Generate Fibonacci value in parallel (>0)
 ```
 
-### Performance
+## Example
+
+```bash
+echo "$( TIMEFORMAT='%lU';time ( fib -i 113 ) 2>&1 )"
+184551825793033096366333
+0m0.005s
+```
+
+## Packages
+
+Here I am using the following packages:
+
+* [Control.Parallel](http://hackage.haskell.org/package/parallel) - to calculate sequence in parallel
+* [System.Console.ParseArgs](http://hackage.haskell.org/package/parseargs) - to parse command line arguments:
+* [Test.QuickCheck](http://hackage.haskell.org/package/QuickCheck) - unit testing
+
+## Interactive
+
+Invoke interactive Haskell session for Glasgow Haskell Compiler:
+
+```bash
+ghci app/Main.hs src/Fibonacci.hs
+```
+
+## Performance
 
 Measure elapsed CPU user time with:
 
@@ -35,7 +56,7 @@ Prelude>  set +s
 *Main>    :main -i 110
 ```
 
-#### Example
+### Example
 
 ```
 $ ghci app/main.hs src/fib.hs
@@ -50,69 +71,3 @@ Fibonacci at index is 43566776258854844738105
 (0.02 secs, 169,352 bytes)
 ```
 
-## Project
-
-A simple project to capture what I learn about Haskell.
-As a guide I am using "A Gentle Introduction to Haskell, Version 98".
-
-On Debian, install the following (and there dependencies):
-
-* haskell-doc
-* haskell98-report
-* haskell98-tutorial
-* haskell-platform
-
-## Resources
-
-* http://dev.stephendiehl.com/hask/
-* https://haskell-lang.org/
-* https://wiki.debian.org/Haskell
-* https://wiki.haskell.org/Haskell
-* https://www.haskell.org/
-* https://www.haskell.org/hoogle
-* http://www.cis.upenn.edu/~cis194/spring13/lectures.html
-
-## Packages
-
-From parsing command line arguments:
-
-* libghc-parseargs-dev
-
-To colourise Haskell code use HsColour command from:
-
-* hscolour
-
-## Interactive
-
-* http://dev.stephendiehl.com/hask/#ghci
-
-Invoke interactive Haskell session for Glasgow Haskell Compiler:
-
-```bash
-ghci
-```
-
-### browse module
-
-Example: browse contents of Data.List module:
-
-```bash
-:browse Data.List
-
-:module Data.List
-:browse!
-```
-
-## References
-
-### System F
-
-* https://en.wikipedia.org/wiki/System_F
-
-### statistics
-
-* http://dev.stephendiehl.com/hask/#statistics
-
-### mathematics
-
-* https://idontgetoutmuch.wordpress.com/category/haskell/
