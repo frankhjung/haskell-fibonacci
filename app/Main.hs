@@ -4,7 +4,7 @@ import           Control.Monad            (when)
 import           System.Console.ParseArgs
 import           System.Environment       (getArgs)
 
-import           Fibonacci                (fibi, fibp, fibs)
+import           Fibonacci                (fibi, fibs)
 
 --
 -- declare program parameters
@@ -13,7 +13,6 @@ data Options =
           FlagHelp
         | OptionIndex
         | OptionSequence
-        | OptionParallel
           deriving (Ord, Eq, Show)
 
 argd :: [ Arg Options ]
@@ -30,21 +29,14 @@ argd = [
             argName  = Just "index",
             argAbbr  = Just 'i',
             argData  = argDataOptional "int" ArgtypeInt,
-            argDesc  = "Generate Fibonacci at index (>0)"
+            argDesc  = "Generate Fibonacci at index"
         },
         Arg {
             argIndex = OptionSequence,
             argName  = Just "sequence",
             argAbbr  = Just 's',
             argData  = argDataOptional "int" ArgtypeInt,
-            argDesc  = "Generate Fibonacci sequence (>0)"
-        },
-        Arg {
-            argIndex = OptionParallel,
-            argName  = Just "parallel",
-            argAbbr  = Just 'p',
-            argData  = argDataOptional "int" ArgtypeInt,
-            argDesc  = "Generate Fibonacci value in parallel (>0)"
+            argDesc  = "Generate Fibonacci sequence"
         }
        ]
 
@@ -57,10 +49,9 @@ main = do
   -- show help if no parameters or help flagged
   argp <- parseArgsIO ArgsComplete argd
   args <- getArgs
+
   when (gotArg argp FlagHelp || null args)
-    (
-      putStrLn (argsUsage argp)
-    )
+    (putStrLn (argsUsage argp))
 
   case getArgInt argp OptionIndex of
     Just n  -> print (fibi n)
@@ -68,9 +59,5 @@ main = do
 
   case getArgInt argp OptionSequence of
     Just n  -> mapM_ print (take n fibs)
-    Nothing -> return ()
-
-  case getArgInt argp OptionParallel of
-    Just n  -> print (fibp n)
     Nothing -> return ()
 

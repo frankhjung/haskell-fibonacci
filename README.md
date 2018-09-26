@@ -7,9 +7,8 @@ Simple project to calculate Fibonacci sequences.
 ```bash
 usage: fib [options]
   [-h,--help]            Help
-  [-i,--index <int>]     Generate Fibonacci at index (>0)
-  [-s,--sequence <int>]  Generate Fibonacci sequence (>0)
-  [-p,--parallel <int>]  Generate Fibonacci value in parallel (>0)
+  [-i,--index <int>]     Generate Fibonacci at index
+  [-s,--sequence <int>]  Generate Fibonacci sequence
 ```
 
 ## Example
@@ -24,7 +23,6 @@ echo "$( TIMEFORMAT='%lU';time ( fib -i 113 ) 2>&1 )"
 
 Here I am using the following packages:
 
-* [Control.Parallel](http://hackage.haskell.org/package/parallel) - to calculate sequence in parallel
 * [System.Console.ParseArgs](http://hackage.haskell.org/package/parseargs) - to parse command line arguments:
 * [Test.QuickCheck](http://hackage.haskell.org/package/QuickCheck) - unit testing
 
@@ -45,7 +43,8 @@ elapsed="$( TIMEFORMAT='%lU';time ( ./main -s 120 ) 2>&1 1>/dev/null )"
 echo $elapsed
 ```
 
-To profile program in interactive GHC session:
+To profile program in interactive [GHC](https://wiki.haskell.org/GHC/GHCi)
+session:
 
 ```c2hs
 # start session

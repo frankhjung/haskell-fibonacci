@@ -1,12 +1,13 @@
 module Main (main) where
 
-import           Fibonacci       (fibi, fibp)
+import           Fibonacci       (fibi)
 import           Test.QuickCheck
 
--- | fibi uses fibs under the hood, so just need to test fibi and fibp
+-- | First 10 Fibonacci numbers
+-- fibi uses fibs under the hood
 prop_fib :: Int -> Bool
-prop_fib n = fibi n == fibp n
+prop_fib n = fibi n == fib10!!(n-1)
+  where fib10 = [1,1,2,3,5,8,13,21,34,55]
 
--- Test small integer in range [-1, 30]
 main :: IO ()
-main = quickCheck $ forAll (choose (-1, 30)) prop_fib
+main = quickCheck $ forAll (elements [1..10]) prop_fib

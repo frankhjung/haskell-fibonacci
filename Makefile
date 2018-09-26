@@ -50,6 +50,7 @@ setup:
 
 .PHONY:	clean
 clean:
+	@cabal clean
 	@stack clean
 
 .PHONY:	cleanall
