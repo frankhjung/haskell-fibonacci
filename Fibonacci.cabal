@@ -20,15 +20,13 @@ executable fib
   build-depends:     base >= 4.7 && < 5.0
                    , parseargs >= 0.2.0 && < 0.3
                    , Fibonacci
-  ghc-options:       -Wall
-                     -threaded
+  ghc-options:       -threaded
 
 library
   hs-source-dirs:    src
   exposed-modules:   Fibonacci
   default-language:  Haskell2010
   build-depends:     base >= 4.7 && < 5.0
-  ghc-options:       -Wall
 
 test-suite test
   hs-source-dirs:    test
@@ -38,5 +36,4 @@ test-suite test
   build-depends:     base >= 4.7 && < 5.0
                    , QuickCheck >= 2.10.1 && < 2.11
                    , Fibonacci
-  ghc-options:       -Wall
 

@@ -9,51 +9,47 @@ SUBS	:= $(wildcard */)
 SRCS	:= $(wildcard $(addsuffix *.hs, $(SUBS)))
 ARGS	?= -h
 
-.PHONY:	all
+.PHONY:	all check style lint tags build test exec install docs setup clean cleanall
+
+build:	tags check
+	@stack build --pedantic --no-test
+
 all:	tags check build test docs
 
 check:	lint style
 
-style:	$(SRCS)
+style:
 	@stylish-haskell --config=.stylish-haskell.yaml --inplace $(SRCS)
 
-lint:	$(SRCS)
+lint:
 	@hlint $(SRCS)
 
-tags:	$(SRCS)
+tags:
 	@hasktags --ctags $(SRCS)
 
-build:	$(SRCS)
-	@stack build
-
-.PHONY:	test
 test:
-	@stack test
+	@stack test --coverage
 
-.PHONY:	exec
-exec:	# Example:  make ARGS="-i 12 -s 12" exec
+exec:
+	# Example:  make ARGS="-i 12 -s 12" exec
 	@stack exec -- $(TARGET) $(ARGS)
 
-.PHONY: install
 install:
 	@stack install --local-bin-path $(HOME)/bin
 
-.PHONY:	docs
 docs:
 	@stack haddock
 
-.PHONY:	setup
 setup:
 	-stack setup
+	-stack build --dependencies-only --test --no-run-tests
 	-stack query
-	-stack ls dependencies
+	-stack list-dependencies
 
-.PHONY:	clean
 clean:
 	@cabal clean
 	@stack clean
 
-.PHONY:	cleanall
 cleanall: clean
-	@$(RM) -rf .stack-work/
+	@$(RM) -rf .stack-work/ $(TARGET) $(TARGET).tix
 

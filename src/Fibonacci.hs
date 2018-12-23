@@ -14,10 +14,10 @@ module Fibonacci ( fibi
 
 -- | Calculate the nth Fibonacci value.
 fibi :: Int -> Integer
-fibi n = last (take n fibs)
---  | n <= 0    = 0
---  | n <= 2    = 1
---  | otherwise = fibs !! (n - 1)
+fibi n
+  | n == 0 = 1
+  | n > 0  = last (take n fibs)
+  | otherwise = error "fibonacci only defined on natural numbers"
 
 -- | Generate a Fibonacci sequence.
 fibs :: [Integer]
