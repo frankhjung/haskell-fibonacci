@@ -3,6 +3,10 @@
 # build without stack using:
 #
 #   ghc -Wall -O2 --make $(SRCS) -o $(TARGET)
+#
+# execute fib with parameters:
+#
+#   make ARGS="-i 12 -s 12" exec
 
 TARGET	:= fib
 SUBS	:= $(wildcard */)
@@ -12,7 +16,7 @@ ARGS	?= -h
 .PHONY:	all check style lint tags build test exec install docs setup clean cleanall
 
 build:	tags check
-	@stack build --pedantic --no-test
+	@stack build --pedantic .
 
 all:	tags check build test docs
 
@@ -28,17 +32,16 @@ tags:
 	@hasktags --ctags $(SRCS)
 
 test:
-	@stack test --coverage
+	@stack build --test --coverage .
 
 exec:
-	# Example:  make ARGS="-i 12 -s 12" exec
-	@stack exec -- $(TARGET) $(ARGS)
+	@stack exec -- $(TARGET) $(ARGS) +RTS -s -N4
 
 install:
-	@stack install --local-bin-path $(HOME)/bin
+	@stack build --copy-bins --local-bin-path $(HOME)/bin
 
 docs:
-	@stack haddock
+	@stack build --haddock
 
 setup:
 	-stack setup
@@ -49,7 +52,8 @@ setup:
 clean:
 	@cabal clean
 	@stack clean
+	@rm -rf $(TARGET).tix
 
 cleanall: clean
-	@$(RM) -rf .stack-work/ $(TARGET) $(TARGET).tix
+	@$(RM) -rf .stack-work/ $(TARGET)
 

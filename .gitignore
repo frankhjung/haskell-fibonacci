@@ -4,6 +4,7 @@ fib
 *.hi
 main
 *.o
-.*.swp
 .stack-work
+.*.swp
 tags
+*.tix

@@ -4,7 +4,7 @@ import           Control.Monad            (when)
 import           System.Console.ParseArgs
 import           System.Environment       (getArgs)
 
-import           Fibonacci                (fibi, fibs)
+import           Fibonacci                (fibi, fibp, fibs)
 
 --
 -- declare program parameters
@@ -12,6 +12,7 @@ import           Fibonacci                (fibi, fibs)
 data Options =
           FlagHelp
         | OptionIndex
+        | OptionParallel
         | OptionSequence
           deriving (Ord, Eq, Show)
 
@@ -30,6 +31,13 @@ argd = [
             argAbbr  = Just 'i',
             argData  = argDataOptional "int" ArgtypeInt,
             argDesc  = "Generate Fibonacci at index"
+        },
+        Arg {
+            argIndex = OptionParallel,
+            argName  = Just "parallel",
+            argAbbr  = Just 'p',
+            argData  = argDataOptional "int" ArgtypeInt,
+            argDesc  = "Generate Fibonacci in parallel"
         },
         Arg {
             argIndex = OptionSequence,
@@ -55,6 +63,10 @@ main = do
 
   case getArgInt argp OptionIndex of
     Just n  -> print (fibi n)
+    Nothing -> return ()
+
+  case getArgInt argp OptionParallel of
+    Just n  -> print (fibp n)
     Nothing -> return ()
 
   case getArgInt argp OptionSequence of
