@@ -13,35 +13,38 @@ SUBS	:= $(wildcard */)
 SRCS	:= $(wildcard $(addsuffix *.hs, $(SUBS)))
 ARGS	?= -h
 
-.PHONY:	all check style lint tags build test exec install docs setup clean cleanall
+.PHONY:	all check style lint tags build cover test exec install docs setup clean cleanall
 
 build:	tags check
-	@stack build --pedantic .
+	@stack build --pedantic --no-test
 
-all:	tags check build test docs
-
-check:	lint style
-
-style:
-	@stylish-haskell --config=.stylish-haskell.yaml --inplace $(SRCS)
-
-lint:
-	@hlint $(SRCS)
+all:	tags check build cover test docs
 
 tags:
 	@hasktags --ctags $(SRCS)
 
+check:	lint style
+
+lint:
+	@hlint $(SRCS)
+
+style:
+	@stylish-haskell --config=.stylish-haskell.yaml --inplace $(SRCS)
+
+cover:
+	@stack build --no-test --coverage .
+
 test:
-	@stack build --test --coverage .
+	@stack build --test
+
+docs:
+	@stack build --haddock
 
 exec:
 	@stack exec -- $(TARGET) $(ARGS) +RTS -s -N4
 
 install:
 	@stack build --copy-bins --local-bin-path $(HOME)/bin
-
-docs:
-	@stack build --haddock
 
 setup:
 	-stack setup

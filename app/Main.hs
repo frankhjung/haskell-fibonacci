@@ -4,7 +4,7 @@ import           Control.Monad            (when)
 import           System.Console.ParseArgs
 import           System.Environment       (getArgs)
 
-import           Fibonacci                (fibi, fibp, fibs)
+import           Fibonacci                (fibf, fibi, fibp, fibs)
 
 --
 -- declare program parameters
@@ -12,6 +12,7 @@ import           Fibonacci                (fibi, fibp, fibs)
 data Options =
           FlagHelp
         | OptionIndex
+        | OptionFast
         | OptionParallel
         | OptionSequence
           deriving (Ord, Eq, Show)
@@ -24,6 +25,13 @@ argd = [
             argAbbr  = Just 'h',
             argData  = Nothing,
             argDesc  = "Help"
+        },
+        Arg {
+            argIndex = OptionFast,
+            argName  = Just "fast",
+            argAbbr  = Just 'f',
+            argData  = argDataOptional "int" ArgtypeInt,
+            argDesc  = "Generate Fibonacci using fast(er) algorithm"
         },
         Arg {
             argIndex = OptionIndex,
@@ -60,6 +68,10 @@ main = do
 
   when (gotArg argp FlagHelp || null args)
     (putStrLn (argsUsage argp))
+
+  case getArgInt argp OptionFast of
+    Just n  -> print (fibf n)
+    Nothing -> return ()
 
   case getArgInt argp OptionIndex of
     Just n  -> print (fibi n)
