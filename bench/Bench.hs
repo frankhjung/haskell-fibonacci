@@ -6,9 +6,7 @@ import           Criterion.Main (Benchmark (..), bench, bgroup, defaultMain,
                                  whnf)
 import           Fibonacci      (fibf, fibi)
 
--- | Benchmarks each Fibonacci algorithm.
--- TODO
--- How to run in parallel so I can include fibp?
+-- | Benchmark Fibonacci algorithms.
 main :: IO ()
 main = defaultMain [
   bgroup "fibf"

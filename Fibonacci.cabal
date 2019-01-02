@@ -38,6 +38,7 @@ test-suite test
                    , hspec >= 2.4.8 && < 2.6.0
                    , QuickCheck >= 2.10.1 && < 2.11
                    , Fibonacci
+  ghc-options:       -threaded
 
 benchmark benchmark
   hs-source-dirs:    bench
@@ -47,4 +48,5 @@ benchmark benchmark
   build-depends:     base >= 4.7 && < 5.0
                    , criterion >= 1.3.0 && < 1.5
                    , Fibonacci
+  ghc-options:       -threaded
 

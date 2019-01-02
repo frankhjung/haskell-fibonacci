@@ -11,8 +11,8 @@ import           Fibonacci                (fibf, fibi, fibp, fibs)
 --
 data Options =
           FlagHelp
-        | OptionIndex
         | OptionFast
+        | OptionIndex
         | OptionParallel
         | OptionSequence
           deriving (Ord, Eq, Show)
@@ -31,7 +31,7 @@ argd = [
             argName  = Just "fast",
             argAbbr  = Just 'f',
             argData  = argDataOptional "int" ArgtypeInt,
-            argDesc  = "Generate Fibonacci using fast(er) algorithm"
+            argDesc  = "Generate Fibonacci using fast algorithm"
         },
         Arg {
             argIndex = OptionIndex,
@@ -82,6 +82,6 @@ main = do
     Nothing -> return ()
 
   case getArgInt argp OptionSequence of
-    Just n  -> mapM_ print (take n fibs)
+    Just n  -> mapM_ print (take (n + 1) fibs)
     Nothing -> return ()
 

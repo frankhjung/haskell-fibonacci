@@ -17,6 +17,8 @@ newtype Negative = Negative Int deriving Show
 instance Arbitrary Negative where
   arbitrary = (Negative . negate) . getPositive <$> arbitrary
 
+-- | 'fibi' is the reference implementation. (It is also the fastest
+-- agorithm).
 main :: IO ()
 main = hspec $ do
 
@@ -24,7 +26,7 @@ main = hspec $ do
     it "fibi == fibf" $
       property $ \(Sample n) -> fibi n == fibf n
 
-  describe "fibi" $
+  describe "fibp" $
     it "fibi == fibp" $
       property $ \(Sample n) -> fibi n == fibp n
 

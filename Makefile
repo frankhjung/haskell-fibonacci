@@ -1,9 +1,5 @@
 #!/usr/bin/env make
 
-# build without stack using:
-#
-#   ghc -Wall -O2 --make $(SRCS) -o $(TARGET)
-#
 # execute fib with parameters:
 #
 #   make ARGS="-i 12 -s 12" exec
@@ -16,7 +12,7 @@ ARGS	?= -h
 .PHONY:	all bench build check clean cleanall cover docs exec install lint setup style tags test
 
 build:	tags check
-	@stack build --pedantic --no-test
+	@stack build --pedantic --no-test --ghc-options='-O2'
 
 all:	tags check build cover test docs bench
 
@@ -35,10 +31,10 @@ cover:
 	@stack build --no-test --coverage .
 
 test:
-	@stack build --test
+	@stack test --test-arguments '+RTS -N4'
 
 bench:
-	@stack build --bench --benchmark-arguments '-o benchmark.html'
+	@stack bench --benchmark-arguments '-o benchmark.html +RTS -N4'
 
 docs:
 	@stack build --haddock

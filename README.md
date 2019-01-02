@@ -7,18 +7,24 @@ Simple project to calculate Fibonacci sequences.
 ```bash
 usage: fib [options]
   [-h,--help]            Help
-  [-f,--fast <int>]      Generate Fibonacci using fast(er) algorithm
+  [-f,--fast <int>]      Generate Fibonacci using fast algorithm
   [-i,--index <int>]     Generate Fibonacci at index
   [-p,--parallel <int>]  Generate Fibonacci in parallel
   [-s,--sequence <int>]  Generate Fibonacci sequence
 ```
 
-## Example
+## Examples
+
+Run fast, index and parallel for ``n = 44`` :
 
 ```bash
-echo "$( TIMEFORMAT='%lU';time ( fib -i 113 ) 2>&1 )"
-184551825793033096366333
-0m0.005s
+$ for o in '-f' '-i' '-p'; do echo "fib ${o} 44 = $( TIMEFORMAT='%lU';time ( fib ${o} 44 +RTS -N2) 2>&1 )" ; done
+fib -f 44 = 701408733
+0m0.009s
+fib -i 44 = 701408733
+0m0.007s
+fib -p 44 = 701408733
+0m34.307s
 ```
 
 ## Packages
@@ -70,6 +76,41 @@ $ ghci app/main.hs src/fib.hs
 # now run commands
 Prelude>  set +s
 *Main>    :main -i 110
+```
+
+## Performance Measure using Fast
+
+```bash
+$ fib -f 40 +RTS -s 
+102334155
+         119,248 bytes allocated in the heap
+          15,800 bytes copied during GC
+          56,864 bytes maximum residency (1 sample(s))
+          29,152 bytes maximum slop
+               2 MB total memory in use (0 MB lost due to fragmentation)
+
+                                     Tot time (elapsed)  Avg pause  Max pause
+  Gen  0         0 colls,     0 par    0.000s   0.000s     0.0000s    0.0000s
+  Gen  1         1 colls,     0 par    0.000s   0.000s     0.0000s    0.0000s
+
+  TASKS: 4 (1 bound, 3 peak workers (3 total), using -N1)
+
+  SPARKS: 0 (0 converted, 0 overflowed, 0 dud, 0 GC'd, 0 fizzled)
+
+  INIT    time    0.001s  (  0.001s elapsed)
+  MUT     time    0.001s  (  0.001s elapsed)
+  GC      time    0.000s  (  0.000s elapsed)
+  EXIT    time    0.002s  (  0.009s elapsed)
+  Total   time    0.004s  (  0.011s elapsed)
+
+  Alloc rate    147,816,860 bytes per MUT second
+
+  Productivity  67.4% of total user, 90.6% of total elapsed
+
+gc_alloc_block_sync: 0
+whitehole_spin: 0
+gen[0].sync: 0
+gen[1].sync: 0
 ```
 
 ## Performance Measure using Index
