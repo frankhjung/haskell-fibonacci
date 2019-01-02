@@ -7,6 +7,7 @@ Simple project to calculate Fibonacci sequences.
 ```bash
 usage: fib [options]
   [-h,--help]            Help
+  [-f,--fast <int>]      Generate Fibonacci using fast(er) algorithm
   [-i,--index <int>]     Generate Fibonacci at index
   [-p,--parallel <int>]  Generate Fibonacci in parallel
   [-s,--sequence <int>]  Generate Fibonacci sequence

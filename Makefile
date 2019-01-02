@@ -13,12 +13,12 @@ SUBS	:= $(wildcard */)
 SRCS	:= $(wildcard $(addsuffix *.hs, $(SUBS)))
 ARGS	?= -h
 
-.PHONY:	all check style lint tags build cover test exec install docs setup clean cleanall
+.PHONY:	all bench build check clean cleanall cover docs exec install lint setup style tags test
 
 build:	tags check
 	@stack build --pedantic --no-test
 
-all:	tags check build cover test docs
+all:	tags check build cover test docs bench
 
 tags:
 	@hasktags --ctags $(SRCS)
@@ -36,6 +36,9 @@ cover:
 
 test:
 	@stack build --test
+
+bench:
+	@stack build --bench --benchmark-arguments '-o benchmark.html'
 
 docs:
 	@stack build --haddock
