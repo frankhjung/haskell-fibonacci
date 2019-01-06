@@ -10,6 +10,7 @@ stages:
 
 variables:
   RTSOPTS: "+RTS -N1"
+  STACK_ROOT: "${CI_PROJECT_DIR}/.stack"
 
 cache:
   key: fibonacci-cache
@@ -22,11 +23,12 @@ all:
   script:
     - make clean setup
     - make check build
-    - make cover test
+    - make test
     - make bench
-    - make docs
+    - make doc
     - make exec
   artifacts:
     paths:
       - .stack-work/benchmark.html
-      - .stack-work/dist/x86_64-linux/Cabal-2.0.1.0/doc/html
+      - .stack-work/dist
+      - .stack-work/install

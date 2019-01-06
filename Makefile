@@ -4,23 +4,23 @@
 #
 #   make ARGS="-i 12 -s 12" exec
 
+.PHONY:	all bench build check clean cleanall doc exec ghci install lint setup style tags test
+
 TARGET	:= fib
 SUBS	:= $(wildcard */)
 SRCS	:= $(wildcard $(addsuffix *.hs, $(SUBS)))
 ARGS	?= -h
 RTSOPTS	?= +RTS -N4
 
-.PHONY:	all bench build check clean cleanall cover docs exec install lint setup style tags test
-
 build:
 	@stack build --pedantic --no-test --ghc-options='-O2'
 
-all:	check build cover test bench docs exec
+all:	check build test bench doc exec
 
 check:	tags lint style
 
 tags:
-	@hasktags --ctags $(SRCS)
+	@hasktags --ctags --extendedctag $(SRCS)
 
 lint:
 	@hlint $(SRCS)
@@ -28,23 +28,20 @@ lint:
 style:
 	@stylish-haskell --config=.stylish-haskell.yaml --inplace $(SRCS)
 
-cover:
-	@stack build --no-test --coverage .
-
 test:
-	@stack test --test-arguments '$(RTSOPTS)'
+	@stack test --coverage --test-arguments '$(RTSOPTS)'
 
 bench:
 	@stack bench --benchmark-arguments '-o .stack-work/benchmark.html $(RTSOPTS)'
 
-docs:
-	@stack build --haddock
+doc:
+	@stack haddock
 
 exec:
 	@stack exec -- $(TARGET) $(ARGS) $(RTSOPTS) -s
 
 install:
-	@stack build --copy-bins --local-bin-path $(HOME)/bin
+	@stack install --local-bin-path $(HOME)/bin $(TARGET)
 
 setup:
 	-stack setup
@@ -55,8 +52,10 @@ setup:
 clean:
 	@cabal clean
 	@stack clean
-	@rm -rf $(TARGET).tix
+	@$(RM) -rf $(TARGET).tix
 
 cleanall: clean
 	@$(RM) -rf .stack-work/ $(TARGET)
 
+ghci:
+	@stack ghci --ghci-options -Wno-type-defaults
