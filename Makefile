@@ -8,18 +8,19 @@ TARGET	:= fib
 SUBS	:= $(wildcard */)
 SRCS	:= $(wildcard $(addsuffix *.hs, $(SUBS)))
 ARGS	?= -h
+RTSOPTS	?= +RTS -N4
 
 .PHONY:	all bench build check clean cleanall cover docs exec install lint setup style tags test
 
-build:	tags check
+build:
 	@stack build --pedantic --no-test --ghc-options='-O2'
 
-all:	tags check build cover test docs bench
+all:	check build cover test bench docs exec
+
+check:	tags lint style
 
 tags:
 	@hasktags --ctags $(SRCS)
-
-check:	lint style
 
 lint:
 	@hlint $(SRCS)
@@ -31,16 +32,16 @@ cover:
 	@stack build --no-test --coverage .
 
 test:
-	@stack test --test-arguments '+RTS -N4'
+	@stack test --test-arguments '$(RTSOPTS)'
 
 bench:
-	@stack bench --benchmark-arguments '-o benchmark.html +RTS -N4'
+	@stack bench --benchmark-arguments '-o .stack-work/benchmark.html $(RTSOPTS)'
 
 docs:
 	@stack build --haddock
 
 exec:
-	@stack exec -- $(TARGET) $(ARGS) +RTS -s -N4
+	@stack exec -- $(TARGET) $(ARGS) $(RTSOPTS) -s
 
 install:
 	@stack build --copy-bins --local-bin-path $(HOME)/bin
@@ -49,7 +50,7 @@ setup:
 	-stack setup
 	-stack build --dependencies-only --test --no-run-tests
 	-stack query
-	-stack list-dependencies
+	-stack ls dependencies
 
 clean:
 	@cabal clean

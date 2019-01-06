@@ -1,0 +1,32 @@
+image:
+  name: haskell:8.2.2
+  entrypoint: [""]
+
+before_script:
+  - apt-get update -qq && apt-get install -y -qq hasktags hlint stylish-haskell
+
+stages:
+  - all
+
+variables:
+  RTSOPTS: "+RTS -N1"
+
+cache:
+  key: fibonacci-cache
+  paths:
+    - .stack
+    - .stack-work
+
+all:
+  stage: all
+  script:
+    - make clean setup
+    - make check build
+    - make cover test
+    - make bench
+    - make docs
+    - make exec
+  artifacts:
+    paths:
+      - .stack-work/benchmark.html
+      - .stack-work/dist/x86_64-linux/Cabal-2.0.1.0/doc/html
