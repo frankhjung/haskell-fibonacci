@@ -9,15 +9,16 @@
 TARGET	:= fib
 SUBS	:= $(wildcard */)
 SRCS	:= $(wildcard $(addsuffix *.hs, $(SUBS)))
-ARGS	?= -h
 RTSOPTS	?= +RTS -N4
+
+ARGS	?= -h
 
 build:
 	@stack build --pedantic --no-test --ghc-options='-O2'
 
 all:	check build test bench doc exec
 
-check:	tags lint style
+check:	tags style lint
 
 tags:
 	@hasktags --ctags --extendedctag $(SRCS)
@@ -31,17 +32,17 @@ style:
 test:
 	@stack test --coverage --test-arguments '$(RTSOPTS)'
 
+exec:
+	@stack exec -- $(TARGET) $(ARGS) $(RTSOPTS) -s
+
 bench:
 	@stack bench --benchmark-arguments '-o .stack-work/benchmark.html $(RTSOPTS)'
 
 doc:
 	@stack haddock
 
-exec:
-	@stack exec -- $(TARGET) $(ARGS) $(RTSOPTS) -s
-
 install:
-	@stack install --local-bin-path $(HOME)/bin $(TARGET)
+	@stack install --local-bin-path $(HOME)/bin
 
 setup:
 	-stack setup
@@ -49,13 +50,15 @@ setup:
 	-stack query
 	-stack ls dependencies
 
+ghci:
+	@stack ghci --ghci-options -Wno-type-defaults
+
+jupyter:
+	@stack exec jupyter -- notebook
+
 clean:
-	@cabal clean
 	@stack clean
 	@$(RM) -rf $(TARGET).tix
 
 cleanall: clean
 	@$(RM) -rf .stack-work/ $(TARGET)
-
-ghci:
-	@stack ghci --ghci-options -Wno-type-defaults
