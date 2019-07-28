@@ -13,8 +13,8 @@ RTSOPTS	?= +RTS -N4
 
 ARGS	?= -h
 
-build:
-	@stack build --pedantic --no-test --ghc-options='-O2'
+.PHONY: default
+default:	check build test
 
 all:	check build test bench doc exec
 
@@ -23,11 +23,14 @@ check:	tags style lint
 tags:
 	@hasktags --ctags --extendedctag $(SRCS)
 
-lint:
-	@hlint $(SRCS)
-
 style:
 	@stylish-haskell --config=.stylish-haskell.yaml --inplace $(SRCS)
+
+lint:
+	@hlint --color $(SRCS)
+
+build:
+	@stack build --pedantic --no-test --ghc-options='-O2'
 
 test:
 	@stack test --coverage --test-arguments '$(RTSOPTS)'
