@@ -9,7 +9,7 @@
 TARGET	:= fib
 SUBS	:= $(wildcard */)
 SRCS	:= $(wildcard $(addsuffix *.hs, $(SUBS)))
-RTSOPTS	?= +RTS -N4
+RTSOPTS	?= +RTS -N1
 
 ARGS	?= -h
 
@@ -61,7 +61,7 @@ jupyter:
 
 clean:
 	@stack clean
-	@$(RM) -rf $(TARGET).tix
+	@$(RM) -rf $(TARGET).tix stack.yaml.lock
 
 cleanall: clean
 	@$(RM) -rf .stack-work/ $(TARGET)
