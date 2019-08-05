@@ -33,7 +33,7 @@ build:
 	@stack build --pedantic --no-test --ghc-options='-O2'
 
 test:
-	@stack test --coverage --test-arguments '$(RTSOPTS)'
+	@stack test
 
 exec:
 	@stack exec -- $(TARGET) $(ARGS) $(RTSOPTS) -s
@@ -42,6 +42,7 @@ bench:
 	@stack bench --benchmark-arguments '-o .stack-work/benchmark.html $(RTSOPTS)'
 
 doc:
+	@stack test --coverage --test-arguments '$(RTSOPTS)'
 	@stack haddock
 
 install:
