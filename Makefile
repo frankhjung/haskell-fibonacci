@@ -14,9 +14,9 @@ RTSOPTS	?= +RTS -N1
 ARGS	?= -h
 
 .PHONY: default
-default:	check build test
+default:	check build test exec
 
-all:	check build test bench doc exec
+all:	check build test doc exec
 
 check:	tags style lint
 
@@ -38,19 +38,19 @@ test:
 exec:
 	@stack exec -- $(TARGET) $(ARGS) $(RTSOPTS) -s
 
-bench:
-	@stack bench --benchmark-arguments '-o .stack-work/benchmark.html $(RTSOPTS)'
-
 doc:
 	@stack test --coverage --test-arguments '$(RTSOPTS)'
 	@stack haddock
+
+bench:
+	@stack bench --benchmark-arguments '-o .stack-work/benchmark.html $(RTSOPTS)'
 
 install:
 	@stack install --local-bin-path $(HOME)/bin
 
 setup:
 	-stack setup
-	-stack build --dependencies-only --test --no-run-tests
+	-stack build --pedantic --no-test --ghc-options='-O2'
 	-stack query
 	-stack ls dependencies
 

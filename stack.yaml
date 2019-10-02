@@ -1,15 +1,10 @@
 # https://www.stackage.org/ ghc 8.4.4 => lts 12.26
 # https://www.stackage.org/lts-12.26/hoogle?q=hspec-core
-resolver: lts-12.26
 flags: {}
-extra-deps:
-  - criterion-1.4.1.0
-  - hspec-2.5.6
-  - hspec-core-2.5.5
-  - hspec-discover-2.5.5
-  - QuickCheck-2.11.3
 packages:
 - .
-arch: x86_64
 system-ghc: true
-
+allow-newer: false
+extra-deps: []
+arch: x86_64
+resolver: lts-12.26

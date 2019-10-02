@@ -17,8 +17,8 @@ executable fib
   hs-source-dirs:    app
   main-is:           Main.hs
   default-language:  Haskell2010
-  build-depends:     base >= 4.11.1 && < 4.12
-                   , parseargs >= 0.2.0 && < 0.3
+  build-depends:     base
+                   , parseargs
                    , Fibonacci
   ghc-options:       -threaded
 
@@ -26,17 +26,17 @@ library
   hs-source-dirs:    src
   exposed-modules:   Fibonacci
   default-language:  Haskell2010
-  build-depends:     base >= 4.11.1 && < 4.12
-                   , parallel >= 3.2.2 && < 3.3
+  build-depends:     base
+                   , parallel
 
 test-suite test
   hs-source-dirs:    test
   main-is:           Test.hs
   default-language:  Haskell2010
   type:              exitcode-stdio-1.0
-  build-depends:     base >= 4.11.1 && < 4.12
-                   , hspec >= 2.5.6
-                   , QuickCheck >= 2.11.3 && < 2.12
+  build-depends:     base
+                   , hspec
+                   , QuickCheck
                    , Fibonacci
   ghc-options:       -threaded
 
@@ -45,8 +45,8 @@ benchmark benchmark
   main-is:           Bench.hs
   default-language:  Haskell2010
   type:              exitcode-stdio-1.0
-  build-depends:     base >= 4.11.1 && < 4.12
-                   , criterion >= 1.5.3 && < 1.6
+  build-depends:     base
+                   , criterion
                    , Fibonacci
   ghc-options:       -threaded
 
