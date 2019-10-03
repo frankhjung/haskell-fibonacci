@@ -32,7 +32,7 @@ pages:
   image: alpine:latest
   stage: deploy
   script:
-    - ls public
+    - echo Publishing pages ...
   dependencies:
     - build
   artifacts:

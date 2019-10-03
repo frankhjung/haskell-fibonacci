@@ -1,0 +1,61 @@
+name: haskell fibonacci
+
+on:
+  push:
+    branches:
+      - master
+      - 'feature/**'
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    env:
+      RTSOPTS: +RTS -N1
+
+    steps:
+
+    - name: checkout
+      uses: actions/checkout@v1.0.0
+      with:
+        ref: refs/heads/master
+        fetch-depth: 1
+
+    - name: stack
+      run: stack setup
+
+    - name: build
+      run: stack build
+
+    - name: test
+      run: stack test
+
+    - name: exec
+      run: |
+        echo fib -h
+        stack exec -- fib -h   $RTSOPTS
+        echo fib -i 5
+        stack exec -- fib -i 5 $RTSOPTS -s
+        echo fib -s 5
+        stack exec -- fib -s 5 $RTSOPTS -s
+
+    - name: documentation
+      run: |
+        stack test --coverage
+        stack haddock --fast
+
+    - name: copy
+      run: |
+        mkdir -p public
+        cp -pr .stack-work/install/x86_64-linux/*/*/hpc/* public/
+        cp -pr .stack-work/dist/x86_64-linux/Cabal-*/doc/html/Fibonacci/* public/
+
+    - name: publish
+      uses: crazy-max/ghaction-github-pages@v0.4.0
+      if: success()
+      with:
+        build_dir: public
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_PAGES_TOKEN }}
