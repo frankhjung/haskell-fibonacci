@@ -2,6 +2,11 @@
 
 Simple project to calculate Fibonacci sequences.
 
+API documentation available at:
+
+* [GitHub](https://frankhjung.github.io/haskell-fibonacci/)
+* [GitLab](https://frankhjung1.gitlab.io/haskell-fibonacci/)
+
 ## Usage
 
 ```
@@ -81,7 +86,7 @@ Prelude>  set +s
 ## Performance Measure using Fast
 
 ```
-$ fib -f 40 +RTS -s 
+$ fib -f 40 +RTS -s
 102334155
          119,248 bytes allocated in the heap
           15,800 bytes copied during GC
@@ -153,7 +158,7 @@ gen[1].sync: 0
 ### 1 CPU
 
 ```
-$ fib -p 40 +RTS -s 
+$ fib -p 40 +RTS -s
 102334155
    5,611,387,864 bytes allocated in the heap
        5,619,896 bytes copied during GC
