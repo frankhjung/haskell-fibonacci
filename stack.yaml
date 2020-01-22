@@ -1,10 +1,7 @@
-# https://www.stackage.org/ ghc 8.4.4 => lts 12.26
-# https://www.stackage.org/lts-12.26/hoogle?q=hspec-core
-flags: {}
-packages:
-- .
-system-ghc: true
-allow-newer: false
-extra-deps: []
 arch: x86_64
-resolver: lts-12.26
+system-ghc: true
+resolver: lts-13.25
+allow-newer: false
+flags: {}
+packages: ['.']
+extra-deps: []
