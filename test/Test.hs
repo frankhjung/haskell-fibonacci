@@ -10,10 +10,11 @@ newtype Sample = Sample Int deriving Show
 instance Arbitrary Sample where
   arbitrary = Sample . (`mod` 35) <$> arbitrary
 
-newtype Negative = Negative Int deriving Show
+-- Negative now part of QuickCheck Modifiers.
+-- newtype Negative = Negative Int deriving Show
 
-instance Arbitrary Negative where
-  arbitrary = (Negative . negate) . getPositive <$> arbitrary
+-- instance Arbitrary Main.Negative where
+--   arbitrary = (Main.Negative . negate) . getPositive <$> arbitrary
 
 -- | 'fibi' is the reference implementation. (It is also the fastest
 -- agorithm).
