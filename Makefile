@@ -65,4 +65,5 @@ clean:
 	@$(RM) -rf $(TARGET).tix stack.yaml.lock
 
 cleanall: clean
-	@$(RM) -rf .stack-work/ $(TARGET)
+	@stack clean --full
+	# @$(RM) -rf .stack-work/ $(TARGET)
