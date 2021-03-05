@@ -35,22 +35,22 @@ build:
 test:
 	@stack test
 
-exec:
-	@stack exec -- $(TARGET) $(ARGS) $(RTSOPTS) -s
-
-doc:
-	@stack test --coverage --test-arguments '$(RTSOPTS)'
-	@stack haddock --no-rerun-tests --no-reconfigure --haddock-deps '$(RTSOPTS)'
-
 bench:
 	@stack bench --benchmark-arguments '-o .stack-work/benchmark.html $(RTSOPTS)'
+
+doc:
+	@stack test --coverage --no-run-tests --test-arguments '$(RTSOPTS)'
+	@stack haddock
+
+exec:
+	@stack exec $(TARGET) -- $(ARGS) $(RTSOPTS) -s
 
 install:
 	@stack install --local-bin-path $(HOME)/bin
 
 setup:
 	-stack setup
-	-stack build --pedantic --no-test --ghc-options='-O2'
+	-stack build --dependencies-only
 	-stack query
 	-stack ls dependencies
 
