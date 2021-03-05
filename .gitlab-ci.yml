@@ -1,3 +1,5 @@
+---
+
 stages:
   - build
   - deploy
@@ -38,5 +40,4 @@ pages:
     - build
   artifacts:
     paths:
-    - public
-
+      - public

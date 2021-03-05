@@ -40,7 +40,7 @@ exec:
 
 doc:
 	@stack test --coverage --test-arguments '$(RTSOPTS)'
-	@stack haddock
+	@stack haddock --no-rerun-tests --no-reconfigure --haddock-deps '$(RTSOPTS)'
 
 bench:
 	@stack bench --benchmark-arguments '-o .stack-work/benchmark.html $(RTSOPTS)'
@@ -62,7 +62,7 @@ jupyter:
 
 clean:
 	@stack clean
-	@$(RM) -rf $(TARGET).tix stack.yaml.lock
+	@$(RM) -rf $(TARGET).tix
 
 cleanall: clean
 	@stack clean --full

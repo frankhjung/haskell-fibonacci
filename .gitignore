@@ -10,4 +10,5 @@
 .stack-work
 fib
 main
+stack.yaml.lock
 tags
