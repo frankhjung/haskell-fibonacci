@@ -1,3 +1,5 @@
+---
+
 name: haskell fibonacci
 
 on:
@@ -17,44 +19,53 @@ jobs:
 
     steps:
 
-    - name: checkout
-      uses: actions/checkout@v1.0.0
-      with:
-        fetch-depth: 1
+      - name: checkout
+        uses: actions/checkout@v2.3.4
+        with:
+          fetch-depth: 1
 
-    - name: stack
-      run: stack setup
+      - name: cache
+        uses: actions/cache@v2.1.4
+        with:
+          path: |
+            dist/
+            dist-newstyle/
+            .stack/
+            .stack-work/
+          key: $GITHUB_REF
 
-    - name: build
-      run: stack build
+      - name: setup
+        run: |
+          cabal new-update
+          cabal new-configure
 
-    - name: test
-      run: stack test
+      - name: build
+        run: cabal new-build
 
-    - name: exec
-      run: |
-        echo fib -h
-        stack exec -- fib -h   $RTSOPTS
-        echo fib -i 5
-        stack exec -- fib -i 5 $RTSOPTS -s
-        echo fib -s 5
-        stack exec -- fib -s 5 $RTSOPTS -s
+      - name: test
+        run: cabal new-test --test-show-details=always
 
-    - name: documentation
-      run: |
-        stack test --coverage
-        stack haddock --fast
+      - name: exec
+        run: |
+          echo fib -h
+          cabal exec -- fib -h   $RTSOPTS
+          echo fib -i 5
+          cabal exec -- fib -i 5 $RTSOPTS -s
+          echo fib -s 5
+          cabal exec -- fib -s 5 $RTSOPTS -s
 
-    - name: copy
-      run: |
-        mkdir -p public
-        cp -pr .stack-work/install/x86_64-linux/*/*/hpc/* public/
-        cp -pr .stack-work/dist/x86_64-linux/Cabal-*/doc/html/Fibonacci/* public/
+      - name: documentation
+        run: cabal new-haddock --haddock-all --haddock-quickjump --haddock-hyperlink-source
 
-    - name: publish
-      uses: crazy-max/ghaction-github-pages@v0.4.0
-      if: success()
-      with:
-        build_dir: public
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_PAGES_TOKEN }}
+      - name: copy
+        run: |
+          mkdir -p public
+          cp -pr dist-newstyle/build/x86_64-linux/ghc*/Fibonacci*/doc/html/Fibonacci/* public/
+
+      - name: publish
+        uses: crazy-max/ghaction-github-pages@v0.4.0
+        if: success()
+        with:
+          build_dir: public
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAGES_TOKEN }}

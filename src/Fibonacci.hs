@@ -1,7 +1,7 @@
 {-|
   Module      : Fibonacci
   Description : Demonstrate different Fibonacci number generators.
-  Copyright   : © Frank Jung, 2018, 2019
+  Copyright   : © Frank Jung, 2018-2021
   License     : GPL-3
   Maintainer  : frankhjung@linux.com
   Stability   : stable

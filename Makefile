@@ -11,7 +11,7 @@ SUBS	:= $(wildcard */)
 SRCS	:= $(wildcard $(addsuffix *.hs, $(SUBS)))
 RTSOPTS	?= +RTS -N1
 
-ARGS	?= -h
+ARGS	?= -f 34
 
 .PHONY: default
 default:	check build test exec
@@ -21,49 +21,36 @@ all:	check build test doc exec
 check:	tags style lint
 
 tags:
-	@hasktags --ctags --extendedctag $(SRCS)
+	hasktags --ctags --extendedctag $(SRCS)
 
 style:
-	@stylish-haskell --config=.stylish-haskell.yaml --inplace $(SRCS)
+	stylish-haskell --config=.stylish-haskell.yaml --inplace $(SRCS)
 
 lint:
-	@hlint --color $(SRCS)
+	hlint --color $(SRCS)
 
 build:
-	@stack build --pedantic --no-test --ghc-options='-O2'
+	cabal new-build
 
 test:
-	@stack test
+	cabal new-test --test-show-details=always
 
 bench:
-	@stack bench --benchmark-arguments '-o .stack-work/benchmark.html $(RTSOPTS)'
+	cabal new-bench
 
 doc:
-	@stack test --coverage --no-run-tests --test-arguments '$(RTSOPTS)'
-	@stack haddock
+	cabal new-haddock --haddock-all --haddock-quickjump --haddock-hyperlink-source
 
 exec:
-	@stack exec $(TARGET) -- $(ARGS) $(RTSOPTS) -s
+	cabal exec $(TARGET) -- -h
+	cabal exec $(TARGET) -- $(ARGS) $(RTSOPTS) -s
 
 install:
-	@stack install --local-bin-path $(HOME)/bin
+	cabal new-install --installdir=$(HOME)/bin
 
 setup:
-	-stack setup
-	-stack build --dependencies-only
-	-stack query
-	-stack ls dependencies
-
-ghci:
-	@stack ghci --ghci-options -Wno-type-defaults
-
-jupyter:
-	@stack exec jupyter -- notebook
+	cabal new-update
+	cabal new-configure
 
 clean:
-	@stack clean
-	@$(RM) -rf $(TARGET).tix
-
-cleanall: clean
-	@stack clean --full
-	# @$(RM) -rf .stack-work/ $(TARGET)
+	cabal new-clean
