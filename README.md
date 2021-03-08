@@ -117,7 +117,7 @@ elapsed="$( TIMEFORMAT='%lU';time ( ./main -s 120 ) 2>&1 1>/dev/null )"
 echo $elapsed
 ```
 
-To profile program in interactive [GHC](https://wiki.haskell.org/GHC/GHCi)
+To profile program in interactive [GHCi](https://wiki.haskell.org/GHC/GHCi)
 session:
 
 ```bash

@@ -49,8 +49,7 @@ install:
 	cabal new-install --installdir=$(HOME)/bin
 
 setup:
-	cabal new-update
-	cabal new-configure
+	cabal new-update --only-dependencies
 
 clean:
 	cabal new-clean
