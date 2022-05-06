@@ -2,7 +2,7 @@
 
 resolver: lts-16.31
 arch: x86_64
-flags: {'+RTS', '-N1'}
+allow-newer: true
 packages: ['.']
 extra-deps:
   - parallel-3.2.2.0

@@ -15,11 +15,9 @@ jobs:
 
   build:
 
-    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
 
-    env:
-      CABAL_CONFIG: $GITHUB_WORKSPACE/.cabal/config
-      RTSOPTS: +RTS -N1
+    runs-on: ubuntu-latest
 
     steps:
 
@@ -30,45 +28,49 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            cabal.project.local
-            .cabal/config
-            dist/
-            dist-newstyle/
+            .stack/
+            .stack-work/
           key: $GITHUB_REF
 
       - name: setup
         run: |
-          mkdir -p .cabal/
-          cabal user-config update
-          cabal new-update --only-dependencies
+          stack update
+          stack setup
+          stack path
+          stack query
+          stack ls dependencies
           cabal check
 
       - name: build
-        run: cabal new-build
+        run: stack build --pedantic --no-test
 
       - name: test
-        run: cabal new-test --test-show-details=always
+        run: stack test
 
       - name: exec
         run: |
           echo fib -h
-          cabal exec -- fib -h   $RTSOPTS
+          stack exec fib -- -h
           echo fib -i 5
-          cabal exec -- fib -i 5 $RTSOPTS -s
+          stack exec fib -- -i 5
           echo fib -s 5
-          cabal exec -- fib -s 5 $RTSOPTS -s
+          stack exec fib -- -s 5
 
-        # yamllint disable rule:line-length
-      - name: documentation
-        if: success() && github.ref == 'refs/heads/master'
-        run: cabal new-haddock --haddock-all --haddock-quickjump --haddock-hyperlink-source
+      - name: benchmark
+        run: stack bench --ba '-o .stack-work/benchmark.html'
+
+      - name: document
+        if: github.ref == 'refs/heads/master'
+        run: |
+          stack test --coverage
+          stack haddock --fast
 
       - name: copy
-        if: success() && github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master'
         run: |
-          mkdir -p public/
-          cp -pr dist-newstyle/build/x86_64-linux/ghc*/Fibonacci*/doc/html/Fibonacci/* public/
-        # yamllint enable
+          mv $(stack path --local-doc-root) public/
+          mv $(stack path --local-hpc-root) public/
+          mv .stack-work/benchmark.html public/
 
       - name: publish
         if: success() && github.ref == 'refs/heads/master'

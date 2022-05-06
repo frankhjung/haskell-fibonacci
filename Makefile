@@ -50,6 +50,7 @@ install:
 
 setup:
 	cabal new-update --only-dependencies
+	cabal user-config update
 
 clean:
 	cabal new-clean
