@@ -1,9 +1,13 @@
 ---
 
+resolver: lts-16.31
 arch: x86_64
-system-ghc: true
-resolver: lts-14.27
 allow-newer: false
 flags: {}
 packages: ['.']
-extra-deps: []
+extra-deps:
+  - parallel-3.2.2.0
+  - parseargs-0.2.0.9
+  - criterion-1.5.7.0
+  - hspec-2.7.6
+  - QuickCheck-2.13.2

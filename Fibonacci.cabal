@@ -7,7 +7,7 @@ license:             GPL-3
 license-file:        LICENSE
 author:              Frank H Jung
 maintainer:          frankhjung@linux.com
-copyright:           Copyright © 2017-2021 Frank H Jung
+copyright:           Copyright © 2017-2022 Frank H Jung
 category:            education
 build-type:          Simple
 cabal-version:       >=1.10
@@ -40,7 +40,7 @@ test-suite test
   build-depends:     base
                    , hspec
                    , QuickCheck
-                   , Fibonacci
+  other-modules:     Fibonacci
   ghc-options:       -threaded
 
 benchmark benchmark
@@ -50,6 +50,6 @@ benchmark benchmark
   type:              exitcode-stdio-1.0
   build-depends:     base
                    , criterion
-                   , Fibonacci
+  other-modules:     Fibonacci
   ghc-options:       -threaded
 

@@ -9,7 +9,7 @@ API documentation available at:
 
 ## Usage
 
-```
+```text
 usage: fib [options]
   [-h,--help]            Help
   [-f,--fast <int>]      Generate Fibonacci using fast algorithm
@@ -22,7 +22,7 @@ usage: fib [options]
 
 Run fast, index and parallel for ``n = 44`` :
 
-```
+```bash
 $ for o in '-f' '-i' '-p'; do echo "fib ${o} 44 = $( TIMEFORMAT='%lU';time ( fib ${o} 44 +RTS -N2) 2>&1 )" ; done
 fib -f 44 = 701408733
 0m0.009s
@@ -43,13 +43,13 @@ Here I am using the following packages:
 
 Invoke interactive Haskell session for Glasgow Haskell Compiler:
 
-```
+```bash
 ghci app/Main.hs src/Fibonacci.hs
 ```
 
 ### Example
 
-```
+```bash
 $ ghci app/main.hs src/fib.hs
 GHCi, version 8.0.2: http://www.haskell.org/ghc/  :? for help
 Loaded GHCi configuration from /home/frank/.ghci
@@ -66,7 +66,7 @@ Fibonacci at index is 43566776258854844738105
 
 Measure elapsed CPU user time with:
 
-```
+```bash
 elapsed="$( TIMEFORMAT='%lU';time ( ./main -s 120 ) 2>&1 1>/dev/null )"
 echo $elapsed
 ```
@@ -74,7 +74,7 @@ echo $elapsed
 To profile program in interactive [GHC](https://wiki.haskell.org/GHC/GHCi)
 session:
 
-```
+```bash
 # start session
 $ ghci app/main.hs src/fib.hs
 
@@ -85,7 +85,7 @@ Prelude>  set +s
 
 ## Performance Measure using Fast
 
-```
+```bash
 $ fib -f 40 +RTS -s
 102334155
          119,248 bytes allocated in the heap
@@ -120,7 +120,7 @@ gen[1].sync: 0
 
 ## Performance Measure using Index
 
-```
+```bash
 $ fib -i 40 +RTS -s
 102334155
          121,312 bytes allocated in the heap
@@ -157,7 +157,7 @@ gen[1].sync: 0
 
 ### 1 CPU
 
-```
+```bash
 $ fib -p 40 +RTS -s
 102334155
    5,611,387,864 bytes allocated in the heap
@@ -192,7 +192,7 @@ gen[1].sync: 0
 
 ### 4 CPU's
 
-```
+```bash
 $ fib -p 40 +RTS -s -N4
 102334155
    5,618,333,144 bytes allocated in the heap
@@ -226,4 +226,3 @@ whitehole_spin: 0
 gen[0].sync: 13
 gen[1].sync: 10
 ```
-

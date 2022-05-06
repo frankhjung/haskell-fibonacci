@@ -49,7 +49,9 @@ install:
 	@stack install --local-bin-path $(HOME)/bin
 
 setup:
+	-stack update
 	-stack setup
+	-stack path
 	-stack build --dependencies-only
 	-stack query
 	-stack ls dependencies

@@ -1,60 +1,75 @@
+---
+
 name: haskell fibonacci
 
+# yamllint disable-line rule:truthy
 on:
   push:
-    branches:
-      - master
-      - 'feature/**'
+  check_run:
+    types: [rerequested, requested_action]
+# yamllint enable
 
 jobs:
 
   build:
 
-    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
 
-    env:
-      RTSOPTS: +RTS -N1
+    runs-on: ubuntu-latest
 
     steps:
 
-    - name: checkout
-      uses: actions/checkout@v1.0.0
-      with:
-        fetch-depth: 1
+      - name: checkout
+        uses: actions/checkout@v3
 
-    - name: stack
-      run: stack setup
+      - name: cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            .stack/
+            .stack-work/
+          key: $GITHUB_REF
 
-    - name: build
-      run: stack build
+      - name: setup
+        run: |
+          stack update
+          stack setup
+          stack path
+          stack build --dependencies-only
+          stack query
+          stack ls dependencies
+          cabal check
 
-    - name: test
-      run: stack test
+      - name: build
+        run: stack build --pedantic --no-test
 
-    - name: exec
-      run: |
-        echo fib -h
-        stack exec -- fib -h   $RTSOPTS
-        echo fib -i 5
-        stack exec -- fib -i 5 $RTSOPTS -s
-        echo fib -s 5
-        stack exec -- fib -s 5 $RTSOPTS -s
+      - name: test
+        run: stack test
 
-    - name: documentation
-      run: |
-        stack test --coverage
-        stack haddock --fast
+      - name: exec
+        run: |
+          echo fib -h
+          stack exec -- fib -h   $RTSOPTS
+          echo fib -i 5
+          stack exec -- fib -i 5 $RTSOPTS -s
+          echo fib -s 5
+          stack exec -- fib -s 5 $RTSOPTS -s
 
-    - name: copy
-      run: |
-        mkdir -p public
-        cp -pr .stack-work/install/x86_64-linux/*/*/hpc/* public/
-        cp -pr .stack-work/dist/x86_64-linux/Cabal-*/doc/html/Fibonacci/* public/
+      - name: document
+        if: github.ref == 'refs/heads/master'
+        run: |
+          stack test --coverage  --no-run-tests
+          stack haddock
 
-    - name: publish
-      uses: crazy-max/ghaction-github-pages@v0.4.0
-      if: success()
-      with:
-        build_dir: public
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_PAGES_TOKEN }}
+      - name: copy
+        if: github.ref == 'refs/heads/master'
+        run: |
+          mv $(stack path --local-doc-root) public/
+          mv .stack-work/benchmark-*.html public/
+
+      - name: publish
+        if: success() && github.ref == 'refs/heads/master'
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: public
