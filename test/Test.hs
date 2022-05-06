@@ -16,7 +16,7 @@ instance Arbitrary Sample where
 -- instance Arbitrary Main.Negative where
 --   arbitrary = (Main.Negative . negate) . getPositive <$> arbitrary
 
--- | 'fibi' is the reference implementation. (It is also the fastest
+-- 'fibi' is the reference implementation. (It is also the fastest
 -- agorithm).
 main :: IO ()
 main = hspec $ do
@@ -40,4 +40,3 @@ main = hspec $ do
   describe "fibp < 0" $
     it "fibp error for negatives" $
       property $ \(Negative n) -> evaluate (fibp n) `shouldThrow` errorCall "fibonacci only defined on natural numbers"
-

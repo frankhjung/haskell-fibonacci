@@ -84,4 +84,3 @@ main = do
   case getArgInt argp OptionSequence of
     Just n  -> mapM_ print (take (n + 1) fibs)
     Nothing -> return ()
-
