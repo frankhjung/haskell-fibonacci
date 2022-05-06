@@ -1,19 +1,20 @@
 {-|
+
   Module      : Fibonacci
   Description : Demonstrate different Fibonacci number generators.
-  Copyright   : © Frank Jung, 2018, 2019
+  Copyright   : © Frank Jung, 2018-2021
   License     : GPL-3
   Maintainer  : frankhjung@linux.com
   Stability   : stable
   Portability : portable
 
-  TODO
+  == /TODO/
 
   Implement <https://doi.org/10.1016/j.ejc.2007.03.004 Binet Formula>
   for generating nth Fibonacci number:
 
 @
-  un = (a^n-b^n) / sqrt(5)
+  fn = (a^n-b^n) / sqrt(5)
   where
     a = (1+sqrt(5))/2
     b = (1-sqrt(5))/2

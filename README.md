@@ -7,6 +7,49 @@ API documentation available at:
 * [GitHub](https://frankhjung.github.io/haskell-fibonacci/)
 * [GitLab](https://frankhjung1.gitlab.io/haskell-fibonacci/)
 
+## Build
+
+This project can be built using either cabal or stack. Cabal seems to have an
+advantage as it does not re-build dependencies when calling test, bench or
+haddock.
+
+Makefile targets are:
+
+### check
+
+This target will build tags using
+[hasktags](https://hackage.haskell.org/package/hasktags), format code using
+[stylish-haskell](http://hackage.haskell.org/package/stylish-haskell) and lint
+using [hlint](http://hackage.haskell.org/package/hlint).
+
+### build
+
+Build library and command line application.
+
+### test
+
+Run unit tests.
+
+### bench
+
+Run performance benchmarks for each algorithm.
+
+### doc
+
+Build haddock documentation including source and quick-jump links.
+
+### exec
+
+Run application with example parameters.
+
+The application can also be run using Cabal:
+
+```bash
+cabal new-run fib -- -s 12
+```
+
+If installed, then the program `fib` will be on the path.
+
 ## Usage
 
 ```text
@@ -23,7 +66,10 @@ usage: fib [options]
 Run fast, index and parallel for ``n = 44`` :
 
 ```bash
-$ for o in '-f' '-i' '-p'; do echo "fib ${o} 44 = $( TIMEFORMAT='%lU';time ( fib ${o} 44 +RTS -N2) 2>&1 )" ; done
+$ for o in '-f' '-i' '-p'; do \
+    echo "fib ${o} 44 = $( TIMEFORMAT='%lU'; \
+    time ( fib ${o} 44 +RTS -N2) 2>&1 )" ; \
+  done
 fib -f 44 = 701408733
 0m0.009s
 fib -i 44 = 701408733
@@ -71,7 +117,7 @@ elapsed="$( TIMEFORMAT='%lU';time ( ./main -s 120 ) 2>&1 1>/dev/null )"
 echo $elapsed
 ```
 
-To profile program in interactive [GHC](https://wiki.haskell.org/GHC/GHCi)
+To profile program in interactive [GHCi](https://wiki.haskell.org/GHC/GHCi)
 session:
 
 ```bash

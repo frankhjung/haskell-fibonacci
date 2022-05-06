@@ -5,6 +5,7 @@ name: haskell fibonacci
 # yamllint disable-line rule:truthy
 on:
   push:
+    tags-ignore: ['*']
   check_run:
     types: [rerequested, requested_action]
 # yamllint enable
@@ -15,7 +16,9 @@ jobs:
 
     if: "!contains(github.event.head_commit.message, 'skip ci')"
 
-    runs-on: ubuntu-latest
+    env:
+      CABAL_CONFIG: $GITHUB_WORKSPACE/.cabal/config
+      RTSOPTS: +RTS -N1
 
     steps:
 
@@ -26,46 +29,45 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            .stack/
-            .stack-work/
+            cabal.project.local
+            .cabal/config
+            dist/
+            dist-newstyle/
           key: $GITHUB_REF
 
       - name: setup
         run: |
-          stack update
-          stack setup
-          stack path
-          stack build --dependencies-only
-          stack query
-          stack ls dependencies
+          mkdir -p .cabal/
+          cabal user-config update
+          cabal new-update --only-dependencies
           cabal check
 
       - name: build
-        run: stack build --pedantic --no-test
+        run: cabal new-build
 
       - name: test
-        run: stack test
+        run: cabal new-test --test-show-details=always
 
       - name: exec
         run: |
           echo fib -h
-          stack exec -- fib -h   $RTSOPTS
+          cabal exec -- fib -h   $RTSOPTS
           echo fib -i 5
-          stack exec -- fib -i 5 $RTSOPTS -s
+          cabal exec -- fib -i 5 $RTSOPTS -s
           echo fib -s 5
-          stack exec -- fib -s 5 $RTSOPTS -s
+          cabal exec -- fib -s 5 $RTSOPTS -s
 
-      - name: document
-        if: github.ref == 'refs/heads/master'
-        run: |
-          stack test --coverage  --no-run-tests
-          stack haddock
+        # yamllint disable rule:line-length
+      - name: documentation
+        if: success() && github.ref == 'refs/heads/master'
+        run: cabal new-haddock --haddock-all --haddock-quickjump --haddock-hyperlink-source
 
       - name: copy
-        if: github.ref == 'refs/heads/master'
+        if: success() && github.ref == 'refs/heads/master'
         run: |
-          mv $(stack path --local-doc-root) public/
-          mv .stack-work/benchmark-*.html public/
+          mkdir -p public/
+          cp -pr dist-newstyle/build/x86_64-linux/ghc*/Fibonacci*/doc/html/Fibonacci/* public/
+        # yamllint enable
 
       - name: publish
         if: success() && github.ref == 'refs/heads/master'
