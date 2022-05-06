@@ -6,8 +6,8 @@ name: haskell fibonacci
 on:
   push:
     tags-ignore: ['*']
-  #check_run:
-  #types: [rerequested, requested_action]
+  check_run:
+    types: [rerequested, requested_action]
 # yamllint enable
 
 jobs:
