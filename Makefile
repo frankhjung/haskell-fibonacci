@@ -4,53 +4,67 @@
 #
 #   make ARGS="-i 12 -s 12" exec
 
-.PHONY:	all bench build check clean cleanall doc exec ghci install lint setup style tags test
-
-TARGET	:= fib
-SUBS	:= $(wildcard */)
-SRCS	:= $(wildcard $(addsuffix *.hs, $(SUBS)))
-RTSOPTS	?= +RTS -N1
-
 ARGS	?= -f 34
+RTSOPTS	?= +RTS -N1 -s
+SRC	:= $(wildcard *.hs, */*.hs)
+TARGET	:= fib
+YAML	:= $(shell git ls-files | grep --perl \.y?ml)
 
 .PHONY: default
 default:	check build test exec
 
-all:	check build test doc exec
+.PHONY: all
+all:	check build test bench doc exec
 
+.PHONY: check
 check:	tags style lint
 
+.PHONY: tags
 tags:
-	hasktags --ctags --extendedctag $(SRCS)
+	hasktags --ctags --extendedctag $(SRC)
 
+.PHONY: style
 style:
-	stylish-haskell --config=.stylish-haskell.yaml --inplace $(SRCS)
+	stylish-haskell --verbose --config=.stylish-haskell.yaml --inplace $(SRC)
 
+.PHONY: lint
 lint:
-	hlint --color $(SRCS)
+	@cabal check --verbose
+	@hlint --cross --color --show $(SRC)
+	@yamllint --strict $(YAML)
 
+.PHONY: build
 build:
-	cabal new-build
+	@stack build --pedantic
 
+.PHONY: test
 test:
-	cabal new-test --test-show-details=always
+	@stack test
 
+.PHONY: bench
 bench:
-	cabal new-bench
+	@stack bench --benchmark-arguments '-o .stack-work/benchmark.html'
 
+.PHONY: doc
 doc:
-	cabal new-haddock --haddock-all --haddock-quickjump --haddock-hyperlink-source
+	@stack haddock --no-haddock-deps
 
+.PHONY: exec
 exec:
-	cabal exec $(TARGET) -- -h
-	cabal exec $(TARGET) -- $(ARGS) $(RTSOPTS) -s
+	-stack exec -- $(TARGET) -h
+	-stack exec -- $(TARGET) $(ARGS) $(RTSOPTS)
 
-install:
-	cabal new-install --installdir=$(HOME)/bin
-
+.PHONY: setup
 setup:
-	cabal new-update --only-dependencies
-	cabal user-config update
+	stack path
+	stack query
+	stack ls dependencies
 
+.PHONY: clean
 clean:
-	cabal new-clean
+	@stack clean
+	@cabal clean
+
+.PHONY: cleanall
+cleanall: clean
+	@stack clean --full

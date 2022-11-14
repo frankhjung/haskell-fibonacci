@@ -68,7 +68,7 @@ fibp :: Int -> Integer
 fibp n
   | n <  0    = error "fibonacci only defined on natural numbers"
   | n <= 1    = toInteger n
-  | otherwise = x `par` (y `pseq` x + y)
+  | otherwise = x `par` y `pseq` x + y
   where x = fibp (n - 1)
         y = fibp (n - 2)
 

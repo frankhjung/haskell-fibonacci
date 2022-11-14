@@ -1,4 +1,6 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE DerivingStrategies #-}
+{-# LANGUAGE OverloadedStrings  #-}
+
 module Main (main) where
 
 import           Control.Exception (evaluate)
@@ -6,7 +8,7 @@ import           Fibonacci         (fibf, fibi, fibp)
 import           Test.Hspec        (describe, errorCall, hspec, it, shouldThrow)
 import           Test.QuickCheck
 
-newtype Sample = Sample Int deriving Show
+newtype Sample = Sample Int deriving stock Show
 
 instance Arbitrary Sample where
   arbitrary = Sample . (`mod` 35) <$> arbitrary
