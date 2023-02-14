@@ -4,7 +4,7 @@
 module Main (main) where
 
 import           Control.Exception (evaluate)
-import           Fibonacci         (fibf, fibi, fibp)
+import           Fibonacci         (fibf, fibi, fibp, fibt)
 import           Test.Hspec        (describe, errorCall, hspec, it, shouldThrow)
 import           Test.QuickCheck
 
@@ -20,17 +20,13 @@ instance Arbitrary Sample where
 --   arbitrary = (Main.Negative . negate) . getPositive <$> arbitrary
 
 -- 'fibi' is the reference implementation. (It is also the fastest
--- agorithm).
+-- algorithm).
 main :: IO ()
 main = hspec $ do
 
   describe "fibf" $
     it "fibi == fibf" $
       property $ \(Sample n) -> fibi n == fibf n
-
-  describe "fibp" $
-    it "fibi == fibp" $
-      property $ \(Sample n) -> fibi n == fibp n
 
   describe "fibf < 0" $
     it "fibf error for negatives" $
@@ -40,6 +36,18 @@ main = hspec $ do
     it "fibi error for negatives" $
       property $ \(Negative n) -> evaluate (fibi n) `shouldThrow` errorCall "fibonacci only defined on natural numbers"
 
+  describe "fibp" $
+    it "fibi == fibp" $
+      property $ \(Sample n) -> fibi n == fibp n
+
   describe "fibp < 0" $
     it "fibp error for negatives" $
       property $ \(Negative n) -> evaluate (fibp n) `shouldThrow` errorCall "fibonacci only defined on natural numbers"
+
+  describe "fibt" $
+    it "fibi == fibt" $
+      property $ \(Sample n) -> fibi n == fibt n
+
+  describe "fibt < 0" $
+    it "fibt error for negatives" $
+      property $ \(Negative n) -> evaluate (fibt n) `shouldThrow` errorCall "fibonacci only defined on natural numbers"

@@ -4,7 +4,7 @@ import           Control.Monad            (when)
 import           System.Console.ParseArgs
 import           System.Environment       (getArgs)
 
-import           Fibonacci                (fibf, fibi, fibp, fibs)
+import           Fibonacci                (fibf, fibi, fibp, fibs, fibt)
 
 --
 -- declare program parameters
@@ -15,6 +15,7 @@ data Options =
         | OptionIndex
         | OptionParallel
         | OptionSequence
+        | OptionTraditional
           deriving (Ord, Eq, Show)
 
 argd :: [ Arg Options ]
@@ -53,6 +54,13 @@ argd = [
             argAbbr  = Just 's',
             argData  = argDataOptional "int" ArgtypeInt,
             argDesc  = "Generate Fibonacci sequence"
+        },
+        Arg {
+            argIndex = OptionTraditional,
+            argName  = Just "traditional",
+            argAbbr  = Just 't',
+            argData  = argDataOptional "int" ArgtypeInt,
+            argDesc  = "Generate Fibonacci using traditional recursion"
         }
        ]
 
@@ -83,4 +91,8 @@ main = do
 
   case getArgInt argp OptionSequence of
     Just n  -> mapM_ print (take (n + 1) fibs)
+    Nothing -> return ()
+
+  case getArgInt argp OptionTraditional  of
+    Just n  -> print (fibt n)
     Nothing -> return ()
