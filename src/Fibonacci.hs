@@ -50,7 +50,7 @@ fibPair n
 fibStep :: (Integer, Integer) -> (Integer, Integer)
 fibStep (u, v) = (v, u + v)
 
--- | Calculate the nth Fibonacci value.
+-- | Get the nth Fibonacci value.
 --
 -- This retrieves value from index of sequence produced by 'fibs'.
 fibi :: Int -> Integer

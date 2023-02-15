@@ -52,13 +52,16 @@ If installed, then the program `fib` will be on the path.
 
 ## Usage
 
-```
+```bash
+$ fib -h
 usage: fib [options]
-  [-h,--help]            Help
-  [-f,--fast <int>]      Generate Fibonacci using fast algorithm
-  [-i,--index <int>]     Generate Fibonacci at index
-  [-p,--parallel <int>]  Generate Fibonacci in parallel
-  [-s,--sequence <int>]  Generate Fibonacci sequence
+  [-h,--help]               Help
+  [-b,--binet <int>]        Generate Fibonacci using Binet formula
+  [-f,--fast <int>]         Generate Fibonacci using fast algorithm
+  [-i,--index <int>]        Generate Fibonacci at index
+  [-p,--parallel <int>]     Generate Fibonacci in parallel
+  [-s,--sequence <int>]     Generate Fibonacci sequence
+  [-t,--traditional <int>]  Generate Fibonacci using traditional recursion
 ```
 
 ## Examples
@@ -66,16 +69,23 @@ usage: fib [options]
 Run fast, index and parallel for ``n = 44`` :
 
 ```bash
-$ for o in '-f' '-i' '-p'; do \
+$ for o in '-b' '-f' '-i' '-p' '-t'; do \
     echo "fib ${o} 44 = $( TIMEFORMAT='%lU'; \
     time ( fib ${o} 44 +RTS -N2) 2>&1 )" ; \
   done
+```
+
+```
+fib -b 44 = 701408733
+0m0.001s
 fib -f 44 = 701408733
-0m0.009s
+0m0.001s
 fib -i 44 = 701408733
-0m0.007s
+0m0.005s
 fib -p 44 = 701408733
-0m34.307s
+0m31.910s
+fib -t 44 = 701408733
+0m20.171s
 ```
 
 ## Packages
@@ -131,145 +141,124 @@ Prelude>  set +s
 
 ## Performance Measure using Fast
 
-```bash
-$ fib -f 40 +RTS -s
-102334155
-         119,248 bytes allocated in the heap
-          15,800 bytes copied during GC
-          56,864 bytes maximum residency (1 sample(s))
-          29,152 bytes maximum slop
-               2 MB total memory in use (0 MB lost due to fragmentation)
+```
+$ fib -f 44 +RTS -s
+701408733
+         120,560 bytes allocated in the heap
+          15,792 bytes copied during GC
+          56,816 bytes maximum residency (1 sample(s))
+          29,200 bytes maximum slop
+               2 MiB total memory in use (0 MB lost due to fragmentation)
 
                                      Tot time (elapsed)  Avg pause  Max pause
   Gen  0         0 colls,     0 par    0.000s   0.000s     0.0000s    0.0000s
-  Gen  1         1 colls,     0 par    0.000s   0.000s     0.0000s    0.0000s
+  Gen  1         1 colls,     0 par    0.000s   0.000s     0.0002s    0.0002s
 
   TASKS: 4 (1 bound, 3 peak workers (3 total), using -N1)
 
   SPARKS: 0 (0 converted, 0 overflowed, 0 dud, 0 GC'd, 0 fizzled)
 
-  INIT    time    0.001s  (  0.001s elapsed)
-  MUT     time    0.001s  (  0.001s elapsed)
+  INIT    time    0.002s  (  0.001s elapsed)
+  MUT     time    0.000s  (  0.000s elapsed)
   GC      time    0.000s  (  0.000s elapsed)
-  EXIT    time    0.002s  (  0.009s elapsed)
-  Total   time    0.004s  (  0.011s elapsed)
+  EXIT    time    0.000s  (  0.008s elapsed)
+  Total   time    0.002s  (  0.010s elapsed)
 
-  Alloc rate    147,816,860 bytes per MUT second
+  Alloc rate    449,257,324 bytes per MUT second
 
-  Productivity  67.4% of total user, 90.6% of total elapsed
-
-gc_alloc_block_sync: 0
-whitehole_spin: 0
-gen[0].sync: 0
-gen[1].sync: 0
+  Productivity  11.3% of total user, 2.7% of total elapsed
 ```
 
 ## Performance Measure using Index
 
-```bash
-$ fib -i 40 +RTS -s
-102334155
-         121,312 bytes allocated in the heap
-          15,800 bytes copied during GC
-          56,864 bytes maximum residency (1 sample(s))
-          29,152 bytes maximum slop
-               2 MB total memory in use (0 MB lost due to fragmentation)
+```
+$ fib -i 44 +RTS -s
+701408733
+         123,320 bytes allocated in the heap
+          15,680 bytes copied during GC
+          56,704 bytes maximum residency (1 sample(s))
+          29,312 bytes maximum slop
+               2 MiB total memory in use (0 MB lost due to fragmentation)
 
                                      Tot time (elapsed)  Avg pause  Max pause
   Gen  0         0 colls,     0 par    0.000s   0.000s     0.0000s    0.0000s
-  Gen  1         1 colls,     0 par    0.000s   0.000s     0.0000s    0.0000s
+  Gen  1         1 colls,     0 par    0.000s   0.000s     0.0001s    0.0001s
 
   TASKS: 4 (1 bound, 3 peak workers (3 total), using -N1)
 
   SPARKS: 0 (0 converted, 0 overflowed, 0 dud, 0 GC'd, 0 fizzled)
 
   INIT    time    0.001s  (  0.001s elapsed)
-  MUT     time    0.001s  (  0.001s elapsed)
+  MUT     time    0.000s  (  0.000s elapsed)
   GC      time    0.000s  (  0.000s elapsed)
   EXIT    time    0.001s  (  0.009s elapsed)
-  Total   time    0.004s  (  0.011s elapsed)
+  Total   time    0.002s  (  0.011s elapsed)
 
-  Alloc rate    103,128,663 bytes per MUT second
+  Alloc rate    617,578,862 bytes per MUT second
 
-  Productivity  68.0% of total user, 89.4% of total elapsed
-
-gc_alloc_block_sync: 0
-whitehole_spin: 0
-gen[0].sync: 0
-gen[1].sync: 0
+  Productivity   9.0% of total user, 2.0% of total elapsed
 ```
 
 ## Performance Measure using Parallel
 
 ### 1 CPU
 
-```bash
-$ fib -p 40 +RTS -s
-102334155
-   5,611,387,864 bytes allocated in the heap
-       5,619,896 bytes copied during GC
-          73,408 bytes maximum residency (2 sample(s))
-          29,272 bytes maximum slop
-               2 MB total memory in use (0 MB lost due to fragmentation)
+```
+$ fib -p 44 +RTS -s -N1
+701408733
+  56,618,785,376 bytes allocated in the heap
+      56,005,384 bytes copied during GC
+          73,544 bytes maximum residency (4 sample(s))
+          29,200 bytes maximum slop
+               3 MiB total memory in use (0 MB lost due to fragmentation)
 
                                      Tot time (elapsed)  Avg pause  Max pause
-  Gen  0      5361 colls,     0 par    0.185s   0.185s     0.0000s    0.0002s
-  Gen  1         2 colls,     0 par    0.000s   0.000s     0.0001s    0.0001s
+  Gen  0     54101 colls,     0 par    0.359s   0.395s     0.0000s    0.0001s
+  Gen  1         4 colls,     0 par    0.001s   0.001s     0.0002s    0.0002s
 
   TASKS: 4 (1 bound, 3 peak workers (3 total), using -N1)
 
-  SPARKS: 165580140 (0 converted, 121660603 overflowed, 0 dud, 43916911 GC'd, 2626 fizzled)
+  SPARKS: 1134903169 (0 converted, 691675009 overflowed, 0 dud, 8192 GC'd, 0 fizzled)
 
-  INIT    time    0.001s  (  0.001s elapsed)
-  MUT     time    3.856s  (  3.854s elapsed)
-  GC      time    0.185s  (  0.185s elapsed)
-  EXIT    time    0.001s  (  0.010s elapsed)
-  Total   time    4.043s  (  4.051s elapsed)
+  INIT    time    0.002s  (  0.001s elapsed)
+  MUT     time   29.088s  ( 29.044s elapsed)
+  GC      time    0.359s  (  0.396s elapsed)
+  EXIT    time    0.000s  (  0.010s elapsed)
+  Total   time   29.449s  ( 29.451s elapsed)
 
-  Alloc rate    1,455,163,270 bytes per MUT second
+  Alloc rate    1,946,477,099 bytes per MUT second
 
-  Productivity  95.4% of total user, 95.4% of total elapsed
-
-gc_alloc_block_sync: 0
-whitehole_spin: 0
-gen[0].sync: 0
-gen[1].sync: 0
+  Productivity  98.8% of total user, 98.6% of total elapsed
 ```
 
 ### 4 CPU's
 
-```bash
-$ fib -p 40 +RTS -s -N4
-102334155
-   5,618,333,144 bytes allocated in the heap
-       4,980,088 bytes copied during GC
-         207,304 bytes maximum residency (2 sample(s))
-          53,272 bytes maximum slop
-               6 MB total memory in use (0 MB lost due to fragmentation)
+```
+$ fib -p 44 +RTS -s -N4
+701408733
+  57,204,209,624 bytes allocated in the heap
+      56,587,328 bytes copied during GC
+         439,200 bytes maximum residency (35 sample(s))
+          57,440 bytes maximum slop
+               6 MiB total memory in use (0 MB lost due to fragmentation)
 
                                      Tot time (elapsed)  Avg pause  Max pause
-  Gen  0      1352 colls,  1352 par    4.628s   0.186s     0.0001s    0.0015s
-  Gen  1         2 colls,     1 par    0.005s   0.000s     0.0001s    0.0002s
+  Gen  0     15709 colls, 15709 par    4.605s   0.538s     0.0000s    0.0138s
+  Gen  1        35 colls,    34 par    0.036s   0.005s     0.0001s    0.0003s
 
-  Parallel GC work balance: 166.41% (serial 0%, perfect 100%)
+  Parallel GC work balance: 44.44% (serial 0%, perfect 100%)
 
   TASKS: 10 (1 bound, 9 peak workers (9 total), using -N4)
 
-  SPARKS: 165768164 (88 converted, 121328717 overflowed, 0 dud, 43995766 GC'd, 443593 fizzled)
+  SPARKS: 1146135554 (7099 converted, 668828118 overflowed, 0 dud, 5852028 GC'd, 48028405 fizzled)
 
-  INIT    time    0.004s  (  0.002s elapsed)
-  MUT     time    2.605s  (  1.638s elapsed)
-  GC      time    4.633s  (  0.186s elapsed)
-  EXIT    time    0.002s  (  0.005s elapsed)
-  Total   time    7.244s  (  1.832s elapsed)
+  INIT    time    0.003s  (  0.001s elapsed)
+  MUT     time   54.027s  ( 15.161s elapsed)
+  GC      time    4.641s  (  0.543s elapsed)
+  EXIT    time    0.001s  (  0.005s elapsed)
+  Total   time   58.671s  ( 15.710s elapsed)
 
-  Alloc rate    2,157,040,729 bytes per MUT second
+  Alloc rate    1,058,815,115 bytes per MUT second
 
-  Productivity  36.0% of total user, 89.7% of total elapsed
-
-gc_alloc_block_sync: 1533
-whitehole_spin: 0
-gen[0].sync: 13
-gen[1].sync: 10
+  Productivity  92.1% of total user, 96.5% of total elapsed
 ```
-
