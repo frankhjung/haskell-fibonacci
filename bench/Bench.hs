@@ -4,11 +4,15 @@ module Main (main) where
 
 import           Criterion.Main (Benchmark (..), bench, bgroup, defaultMain,
                                  whnf)
-import           Fibonacci      (fibf, fibi, fibp, fibt)
+import           Fibonacci      (fibb, fibf, fibi, fibp, fibt)
 
 -- | Benchmark Fibonacci algorithms.
 main :: IO ()
 main = defaultMain [
+  bgroup "fibb"
+    [ bench  "5" $ whnf fibb  5
+    , bench "34" $ whnf fibb 34
+    ],
   bgroup "fibf"
     [ bench  "5" $ whnf fibf  5
     , bench "34" $ whnf fibf 34

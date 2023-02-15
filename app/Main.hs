@@ -4,13 +4,14 @@ import           Control.Monad            (when)
 import           System.Console.ParseArgs
 import           System.Environment       (getArgs)
 
-import           Fibonacci                (fibf, fibi, fibp, fibs, fibt)
+import           Fibonacci                (fibb, fibf, fibi, fibp, fibs, fibt)
 
 --
 -- declare program parameters
 --
 data Options =
           FlagHelp
+        | OptionBinet
         | OptionFast
         | OptionIndex
         | OptionParallel
@@ -26,6 +27,13 @@ argd = [
             argAbbr  = Just 'h',
             argData  = Nothing,
             argDesc  = "Help"
+        },
+        Arg {
+            argIndex = OptionBinet,
+            argName  = Just "binet",
+            argAbbr  = Just 'b',
+            argData  = argDataOptional "int" ArgtypeInt,
+            argDesc  = "Generate Fibonacci using Binet formula"
         },
         Arg {
             argIndex = OptionFast,
@@ -70,12 +78,16 @@ argd = [
 main :: IO ()
 main = do
 
-  -- show help if no parameters or help flagged
   argp <- parseArgsIO ArgsComplete argd
   args <- getArgs
 
+  -- show help if no parameters or help flagged
   when (gotArg argp FlagHelp || null args)
     (putStrLn (argsUsage argp))
+
+  case getArgInt argp OptionBinet of
+    Just n  -> print (fibb n)
+    Nothing -> return ()
 
   case getArgInt argp OptionFast of
     Just n  -> print (fibf n)

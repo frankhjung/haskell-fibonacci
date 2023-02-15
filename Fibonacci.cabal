@@ -1,7 +1,7 @@
 cabal-version:       3.0
 
 name:                Fibonacci
-version:             0.14.0
+version:             0.15.0
 synopsis:            Show Fibonacci index or sequence
 description:         A simple Haskell project to generate Fibonacci numbers.
 homepage:            https://gitlab.com/frankhjung1/haskell-fibonacci

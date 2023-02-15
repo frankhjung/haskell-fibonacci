@@ -8,22 +8,10 @@
   Stability   : stable
   Portability : portable
 
-  == /TODO/
-
-  Implement <https://doi.org/10.1016/j.ejc.2007.03.004 Binet Formula>
-  for generating nth Fibonacci number:
-
-@
-  fn = (a^n-b^n) / sqrt(5)
-  where
-    a = (1+sqrt(5))/2
-    b = (1-sqrt(5))/2
-    n = Integer >= 1
-@
-
 -}
 
-module Fibonacci ( fibf
+module Fibonacci ( fibb
+                 , fibf
                  , fibi
                  , fibp
                  , fibs
@@ -31,6 +19,16 @@ module Fibonacci ( fibf
                  ) where
 
 import           Control.Parallel (par, pseq)
+
+-- | <https://doi.org/10.1016/j.ejc.2007.03.004 Binet Formula> for generating
+-- nth Fibonacci number.
+fibb :: Int -> Integer
+fibb n
+  | n < 0     = error "fibonacci only defined on natural numbers"
+  | n <= 1    = toInteger n
+  | otherwise = round $ (a^n - b^n) / sqrt 5
+  where a = (1 + sqrt 5) / 2 :: Double
+        b = (1 - sqrt 5) / 2 :: Double
 
 -- | Fast Fibonacci.
 --
