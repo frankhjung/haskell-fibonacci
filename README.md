@@ -42,10 +42,9 @@ Build haddock documentation including source and quick-jump links.
 
 Run application with example parameters.
 
-The application can also be run using Cabal:
-
 ```bash
-cabal new-run fib -- -s 12
+$ stack exec fib -- -i 12
+144
 ```
 
 If installed, then the program `fib` will be on the path.
@@ -73,9 +72,7 @@ $ for o in '-b' '-f' '-i' '-p' '-t'; do \
     echo "fib ${o} 44 = $( TIMEFORMAT='%lU'; \
     time ( fib ${o} 44 +RTS -N2) 2>&1 )" ; \
   done
-```
 
-```
 fib -b 44 = 701408733
 0m0.001s
 fib -f 44 = 701408733
@@ -141,7 +138,7 @@ Prelude>  set +s
 
 ## Performance Measure using Fast
 
-```
+```bash
 $ fib -f 44 +RTS -s
 701408733
          120,560 bytes allocated in the heap
@@ -171,7 +168,7 @@ $ fib -f 44 +RTS -s
 
 ## Performance Measure using Index
 
-```
+```bash
 $ fib -i 44 +RTS -s
 701408733
          123,320 bytes allocated in the heap
@@ -203,7 +200,7 @@ $ fib -i 44 +RTS -s
 
 ### 1 CPU
 
-```
+```bash
 $ fib -p 44 +RTS -s -N1
 701408733
   56,618,785,376 bytes allocated in the heap
@@ -233,7 +230,7 @@ $ fib -p 44 +RTS -s -N1
 
 ### 4 CPU's
 
-```
+```bash
 $ fib -p 44 +RTS -s -N4
 701408733
   57,204,209,624 bytes allocated in the heap

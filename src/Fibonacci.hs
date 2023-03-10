@@ -20,8 +20,10 @@ module Fibonacci ( fibb
 
 import           Control.Parallel (par, pseq)
 
--- | <https://doi.org/10.1016/j.ejc.2007.03.004 Binet Formula> for generating
--- nth Fibonacci number.
+-- | Binet Fibonacci.
+--
+-- Uses the <https://doi.org/10.1016/j.ejc.2007.03.004 Binet Formula> to
+-- generate the nth Fibonacci number.
 fibb :: Int -> Integer
 fibb n
   | n < 0     = error "fibonacci only defined on natural numbers"
@@ -50,16 +52,19 @@ fibPair n
 fibStep :: (Integer, Integer) -> (Integer, Integer)
 fibStep (u, v) = (v, u + v)
 
--- | Get the nth Fibonacci value.
+-- | Fibonacci Index.
 --
--- This retrieves value from index of sequence produced by 'fibs'.
+-- This retrieves the nth Fibonacci value by index from a sequence
+-- produced by 'fibs'.
 fibi :: Int -> Integer
 fibi n
   | n < 0 = error "fibonacci only defined on natural numbers"
   | n <= 1    = toInteger n
   | otherwise = fibs !! n
 
--- | Generate a Fibonacci sequence. The `fibs` function is a definition of an
+-- | Fibonacci Sequence.
+--
+-- The `fibs` function is a definition of an
 -- infinite list of Fibonacci numbers. It is defined recursively, by starting
 -- with the two numbers 0 and 1, and then generating the rest of the sequence by
 -- adding adjacent pairs of numbers in the list.
@@ -79,7 +84,9 @@ fibi n
 fibs :: [Integer]
 fibs = 0 : 1 : zipWith (+) fibs (tail fibs)
 
--- | Calculate Fibonacci in parallel.
+-- | Parallel Fibonacci.
+--
+-- Calculate Fibonacci in parallel.
 --
 -- From: "Practical Concurrent Haskell: With Big Data Applications",
 -- Chapter 3, Parallelism and Concurrency with Haskell
@@ -91,7 +98,9 @@ fibp n
   where x = fibp (n - 1)
         y = fibp (n - 2)
 
--- | Traditional recursive Fibonacci.
+-- | Traditional Fibonacci.
+--
+-- The traditional recursive Fibonacci.
 fibt :: Int -> Integer
 fibt n
   | n < 0     = error "fibonacci only defined on natural numbers"
