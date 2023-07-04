@@ -81,6 +81,14 @@ fibi n
 -- sequence, which is an infinite list of Fibonacci numbers [0, 1, 1, 2, 3, 5,
 -- 8, 13, 21, ...].
 --
+-- This is very similar to this implementation:
+--
+-- @
+-- fibs = 0 : 1 : helper fibs (tail fibs)
+--   ​where​​
+--     helper (a:as) (b:bs) = a + b : helper as bs
+-- @
+--
 fibs :: [Integer]
 fibs = 0 : 1 : zipWith (+) fibs (tail fibs)
 
