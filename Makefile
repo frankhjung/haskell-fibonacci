@@ -4,7 +4,7 @@
 #
 #   make ARGS="-i 12 -s 12" exec
 
-ARGS	?= -f 34
+ARGS	?= -r 34
 RTSOPTS	?= +RTS -N1 -s
 SRC	:= $(wildcard *.hs, */*.hs)
 TARGET	:= fib

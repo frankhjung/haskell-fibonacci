@@ -4,7 +4,7 @@
 module Main (main) where
 
 import           Control.Exception (evaluate)
-import           Fibonacci         (fibb, fibf, fibi, fibp, fibt)
+import           Fibonacci         (fibb, fibi, fibp, fibr, fibt)
 import           Test.Hspec        (describe, errorCall, hspec, it, shouldThrow)
 import           Test.QuickCheck
 
@@ -36,14 +36,6 @@ main = hspec $ do
     it "fibb error for negatives" $
       property $ \(Negative n) -> evaluate (fibb n) `shouldThrow` errorCall fiberr
 
-  describe "fibf" $
-    it "fibf == fibi" $
-      property $ \(Sample n) -> fibf n == fibi n
-
-  describe "fibf < 0" $
-    it "fibf error for negatives" $
-      property $ \(Negative n) -> evaluate (fibf n) `shouldThrow` errorCall fiberr
-
   describe "fibi < 0" $
     it "fibi error for negatives" $
       property $ \(Negative n) -> evaluate (fibi n) `shouldThrow` errorCall fiberr
@@ -55,6 +47,14 @@ main = hspec $ do
   describe "fibp < 0" $
     it "fibp error for negatives" $
       property $ \(Negative n) -> evaluate (fibp n) `shouldThrow` errorCall fiberr
+
+  describe "fibr" $
+    it "fibr == fibi" $
+      property $ \(Sample n) -> fibr n == fibi n
+
+  describe "fibr < 0" $
+    it "fibr error for negatives" $
+      property $ \(Negative n) -> evaluate (fibr n) `shouldThrow` errorCall fiberr
 
   describe "fibt" $
     it "fibt == fibi" $

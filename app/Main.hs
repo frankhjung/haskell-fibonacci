@@ -4,7 +4,7 @@ import           Control.Monad            (when)
 import           System.Console.ParseArgs
 import           System.Environment       (getArgs)
 
-import           Fibonacci                (fibb, fibf, fibi, fibp, fibs, fibt)
+import           Fibonacci                (fibb, fibi, fibp, fibr, fibs, fibt)
 
 --
 -- declare program parameters
@@ -12,9 +12,9 @@ import           Fibonacci                (fibb, fibf, fibi, fibp, fibs, fibt)
 data Options =
           FlagHelp
         | OptionBinet
-        | OptionFast
         | OptionIndex
         | OptionParallel
+        | OptionRebecca
         | OptionSequence
         | OptionTraditional
           deriving (Ord, Eq, Show)
@@ -36,13 +36,6 @@ argd = [
             argDesc  = "Generate Fibonacci using Binet formula"
         },
         Arg {
-            argIndex = OptionFast,
-            argName  = Just "fast",
-            argAbbr  = Just 'f',
-            argData  = argDataOptional "int" ArgtypeInt,
-            argDesc  = "Generate Fibonacci using fast algorithm"
-        },
-        Arg {
             argIndex = OptionIndex,
             argName  = Just "index",
             argAbbr  = Just 'i',
@@ -55,6 +48,13 @@ argd = [
             argAbbr  = Just 'p',
             argData  = argDataOptional "int" ArgtypeInt,
             argDesc  = "Generate Fibonacci in parallel"
+        },
+        Arg {
+            argIndex = OptionRebecca,
+            argName  = Just "rebecca",
+            argAbbr  = Just 'r',
+            argData  = argDataOptional "int" ArgtypeInt,
+            argDesc  = "Generate Fibonacci using code from Rebecca Skinner"
         },
         Arg {
             argIndex = OptionSequence,
@@ -89,16 +89,16 @@ main = do
     Just n  -> print (fibb n)
     Nothing -> return ()
 
-  case getArgInt argp OptionFast of
-    Just n  -> print (fibf n)
-    Nothing -> return ()
-
   case getArgInt argp OptionIndex of
     Just n  -> print (fibi n)
     Nothing -> return ()
 
   case getArgInt argp OptionParallel of
     Just n  -> print (fibp n)
+    Nothing -> return ()
+
+  case getArgInt argp OptionRebecca of
+    Just n  -> print (fibr n)
     Nothing -> return ()
 
   case getArgInt argp OptionSequence of

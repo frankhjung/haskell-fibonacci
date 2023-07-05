@@ -11,9 +11,9 @@
 -}
 
 module Fibonacci ( fibb
-                 , fibf
                  , fibi
                  , fibp
+                 , fibr
                  , fibs
                  , fibt
                  ) where
@@ -28,29 +28,9 @@ fibb :: Int -> Integer
 fibb n
   | n < 0     = error "fibonacci only defined on natural numbers"
   | n <= 1    = toInteger n
-  | otherwise = round $ (a^n - b^n) / sqrt 5
-  where a = (1 + sqrt 5) / 2 :: Double
-        b = (1 - sqrt 5) / 2 :: Double
-
--- | Fast Fibonacci.
---
--- From: "Haskell - the craft of functional programming"
--- Chapter 5, Data Types, Tuples and Lists
-fibf :: Int -> Integer
-fibf n
-  | n < 0     = error "fibonacci only defined on natural numbers"
-  | n <= 1    = toInteger n
-  | otherwise = (fst . fibPair) n
-
--- | Fibonacci Pairs.
-fibPair :: Int -> (Integer, Integer)
-fibPair n
-  | n == 0    = (0, 1)
-  | otherwise = fibStep (fibPair (n - 1))
-
--- | Fibonacci Step.
-fibStep :: (Integer, Integer) -> (Integer, Integer)
-fibStep (u, v) = (v, u + v)
+  | otherwise = round $ (phi^n - (1-phi)^n) / sqrt 5
+  where
+    phi = (1 + sqrt 5) / 2 :: Double
 
 -- | Fibonacci Index.
 --
@@ -61,6 +41,35 @@ fibi n
   | n < 0 = error "fibonacci only defined on natural numbers"
   | n <= 1    = toInteger n
   | otherwise = fibs !! n
+
+-- | Parallel Fibonacci.
+--
+-- Calculate Fibonacci in parallel.
+--
+-- From: "Practical Concurrent Haskell: With Big Data Applications",
+-- Chapter 3, Parallelism and Concurrency with Haskell
+fibp :: Int -> Integer
+fibp n
+  | n <  0    = error "fibonacci only defined on natural numbers"
+  | n <= 1    = toInteger n
+  | otherwise = x `par` y `pseq` x + y
+  where x = fibp (n - 1)
+        y = fibp (n - 2)
+
+-- | Fibonacci using code from Rebecca Skinner.
+--
+-- From: "Effective Haskell" by Rebecca Skinner
+-- Chapter 2, Hands-On With Infinite Fibonacci Numbers
+fibr :: Int -> Integer
+fibr n
+  | n < 0 = error "fibonacci only defined on natural numbers"
+  | otherwise = fibr' !! n
+  where
+    fibr' :: [Integer]
+    fibr' = 0 : 1 : go fibr' (tail fibr')
+    go :: [Integer] -> [Integer] -> [Integer]
+    go (x:xs) (y:ys) = (x + y) : go xs ys
+    go _ _           = error "impossible case"
 
 -- | Fibonacci Sequence.
 --
@@ -81,30 +90,10 @@ fibi n
 -- sequence, which is an infinite list of Fibonacci numbers [0, 1, 1, 2, 3, 5,
 -- 8, 13, 21, ...].
 --
--- This is very similar to this implementation:
---
--- @
--- fibs = 0 : 1 : helper fibs (tail fibs)
---   ​where​​
---     helper (a:as) (b:bs) = a + b : helper as bs
--- @
+-- This is very similar to the `fibr` function, but it uses `zipWith`.
 --
 fibs :: [Integer]
 fibs = 0 : 1 : zipWith (+) fibs (tail fibs)
-
--- | Parallel Fibonacci.
---
--- Calculate Fibonacci in parallel.
---
--- From: "Practical Concurrent Haskell: With Big Data Applications",
--- Chapter 3, Parallelism and Concurrency with Haskell
-fibp :: Int -> Integer
-fibp n
-  | n <  0    = error "fibonacci only defined on natural numbers"
-  | n <= 1    = toInteger n
-  | otherwise = x `par` y `pseq` x + y
-  where x = fibp (n - 1)
-        y = fibp (n - 2)
 
 -- | Traditional Fibonacci.
 --
