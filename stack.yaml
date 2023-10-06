@@ -1,11 +1,5 @@
 ---
-resolver: lts-19.27
+resolver: lts-21.14
 arch: x86_64
 allow-newer: true
 packages: ["."]
-extra-deps:
-  - criterion-1.5.13.0
-  - hspec-2.8.5
-  - parallel-3.2.2.0
-  - parseargs-0.2.0.9
-  - QuickCheck-2.14.2

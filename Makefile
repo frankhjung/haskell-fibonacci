@@ -8,46 +8,54 @@ ARGS	?= -r 34
 RTSOPTS	?= +RTS -N1 -s
 SRC	:= $(wildcard *.hs, */*.hs)
 TARGET	:= fib
-YAML	:= $(shell git ls-files | grep --perl \.y?ml)
+YAML	:= $(shell git ls-files "*.y*ml")
 
 .PHONY: default
-default:	check build test exec
+default:	format check build test exec
 
 .PHONY: all
-all:	check build test bench doc exec
+all:	format check build test bench doc exec
+
+.PHONY: format
+format:
+	@echo format ...
+	@stylish-haskell --verbose --config=.stylish-haskell.yaml --inplace $(SRC)
+	@cabal-fmt --inplace Fibonacci.cabal
 
 .PHONY: check
-check:	tags style lint
+check:	tags lint
 
 .PHONY: tags
 tags:
-	hasktags --ctags --extendedctag $(SRC)
-
-.PHONY: style
-style:
-	stylish-haskell --verbose --config=.stylish-haskell.yaml --inplace $(SRC)
+	@echo tags ...
+	@hasktags --ctags --extendedctag $(SRC)
 
 .PHONY: lint
 lint:
+	@echo lint ...
 	@cabal check --verbose
 	@hlint --cross --color --show $(SRC)
 	@yamllint --strict $(YAML)
 
 .PHONY: build
 build:
+	@echo build ...
 	@stack build --pedantic
 
 .PHONY: test
 test:
+	@echo test ...
 	@stack test
 
 .PHONY: bench
 bench:
+	@echo bench ...
 	@stack bench --benchmark-arguments '-o .stack-work/benchmark.html'
 
 .PHONY: doc
 doc:
-	@stack haddock --no-haddock-deps
+	@echo doc ...
+	@stack haddock
 
 .PHONY: exec
 exec:
@@ -56,9 +64,9 @@ exec:
 
 .PHONY: setup
 setup:
-	stack path
-	stack query
-	stack ls dependencies
+	@stack path
+	@stack query
+	@stack ls dependencies
 
 .PHONY: clean
 clean:
@@ -67,4 +75,4 @@ clean:
 
 .PHONY: cleanall
 cleanall: clean
-	@stack clean --full
+	@stack purge

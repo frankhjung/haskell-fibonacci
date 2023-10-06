@@ -6,27 +6,26 @@ stages:
 
 variables:
   RTSOPTS: "+RTS -N1 -s"
-  STACK_ROOT: ${CI_PROJECT_DIR}/.stack
+  STACK_ROOT: ${CI_PROJECT_DIR}/.stack-work
 
 build:
   stage: build
   except:
     - tags
   image:
-    name: frankhjung/haskell:9.0.2
+    name: frankhjung/haskell:9.4.7
     entrypoint: [""]
   script:
     - make clean check build test bench doc exec
-    - mv $(stack path --local-install-root)/doc/Fibonacci-*/ public/
-    - mv .stack-work/benchmark.html public/
+    - mv $(stack path --local-doc-root)/ public/
+    - mv ${STACK_ROOT}/benchmark.html public/
   artifacts:
     paths:
       - public
   cache:
     key: ${CI_COMMIT_REF_NAME}
     paths:
-      - .stack
-      - .stack-work
+      - ${STACK_ROOT}
 
 pages:
   stage: deploy
