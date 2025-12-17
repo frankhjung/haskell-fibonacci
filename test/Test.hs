@@ -1,6 +1,15 @@
 {-# LANGUAGE DerivingStrategies #-}
 {-# LANGUAGE OverloadedStrings  #-}
 
+{-| Module      : Main
+    Description : Property-based tests for Fibonacci algorithms
+    Copyright   : © Frank Jung, 2018-2025
+    License     : GPL-3
+    Maintainer  : frankhjung@linux.com
+    Stability   : stable
+    Portability : portable
+-}
+
 module Main (main) where
 
 import           Control.Exception (evaluate)
