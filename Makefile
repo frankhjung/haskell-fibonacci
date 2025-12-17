@@ -19,7 +19,7 @@ all:	format check build test bench doc exec
 .PHONY: format
 format:
 	@echo format ...
-	@stylish-haskell --verbose --config=.stylish-haskell.yaml --inplace $(SRC)
+	@stylish-haskell --inplace $(SRC)
 	@cabal-fmt --inplace Fibonacci.cabal
 
 .PHONY: check
